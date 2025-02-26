@@ -2,6 +2,10 @@ import { motion } from "framer-motion";
 import { Link } from "react-router";
 
 function Navbar() {
+
+  const token = localStorage.getItem("authToken");
+
+
   return (
     <motion.header
       initial={{ y: -100, opacity: 0 }}
@@ -47,9 +51,19 @@ function Navbar() {
             </li>
           ))}
         </ul>
-        <button className="rounded-4xl bg-gray-900 text-white px-5 py-3 ml-10 font-montserrat font-semibold cursor-pointer">
-          Get Started
-        </button>
+        {token ? (
+        <Link to="/dashboard">
+          <button className="transition-all duration-300 rounded-4xl bg-gray-900 text-white px-5 py-3 ml-10 font-montserrat font-semibold cursor-pointer hover:bg-gray-400 hover:outline-2 hover:border-gray-900 border-2">
+            Dashboard
+          </button>
+        </Link>
+      ) : (
+        <Link to="/auth">
+          <button className="transition-all duration-300 rounded-4xl bg-gray-900 text-white px-5 py-3 ml-10 font-montserrat font-semibold cursor-pointer hover:bg-gray-400 hover:outline-2 hover:border-gray-900 border-2">
+            Get Started
+          </button>
+        </Link>
+      )}
       </div>
     </motion.header>
   );

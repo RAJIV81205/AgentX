@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 function Hero() {
+    const token = localStorage.getItem("authToken");
   return (
     <section className="relative py-12 sm:py-16 lg:py-15 lg:pb-36">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -36,13 +38,28 @@ function Hero() {
               </motion.p>
 
               {/* Animated Button */}
-              <motion.button
-                className="inline-flex px-6 py-3 text-lg font-bold text-white transition-all duration-300 bg-gray-900 rounded-lg focus:outline-none font-pj hover:bg-gray-600 my-2.5 cursor-pointer"
-                whileHover={{ scale: 1.01}}
-                whileTap={{ scale: 0.9 }}
-              >
-                Get Free Card
-              </motion.button>
+
+              {token ? (
+                <Link to="/dashboard">
+                  <motion.button
+                    className="inline-flex px-6 py-3 text-lg font-bold text-white transition-all duration-300 bg-gray-900 rounded-lg focus:outline-none font-pj hover:bg-gray-600 my-2.5 cursor-pointer"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    Dashboard
+                  </motion.button>
+                </Link>
+              ) : (
+                <Link to="/auth">
+                  <motion.button
+                    className="inline-flex px-6 py-3 text-lg font-bold text-white transition-all duration-300 bg-gray-900 rounded-lg focus:outline-none font-pj hover:bg-gray-600 my-2.5 cursor-pointer"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    Get Started
+                  </motion.button>
+                </Link>
+              )}
             </div>
 
             {/* Stats Section */}
@@ -62,9 +79,14 @@ function Hero() {
               {/* Bookings Completed */}
               <motion.div
                 className="flex items-center"
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
               >
-                <p className="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">2943</p>
+                <p className="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">
+                  2943
+                </p>
                 <p className="ml-3 text-sm text-gray-900 font-pj">
                   Bookings
                   <br />
@@ -82,20 +104,50 @@ function Hero() {
                   stroke="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <line x1="0.72265" y1="10.584" x2="15.7226" y2="0.583975"></line>
-                  <line x1="0.72265" y1="17.584" x2="15.7226" y2="7.58398"></line>
-                  <line x1="0.72265" y1="24.584" x2="15.7226" y2="14.584"></line>
-                  <line x1="0.72265" y1="31.584" x2="15.7226" y2="21.584"></line>
-                  <line x1="0.72265" y1="38.584" x2="15.7226" y2="28.584"></line>
+                  <line
+                    x1="0.72265"
+                    y1="10.584"
+                    x2="15.7226"
+                    y2="0.583975"
+                  ></line>
+                  <line
+                    x1="0.72265"
+                    y1="17.584"
+                    x2="15.7226"
+                    y2="7.58398"
+                  ></line>
+                  <line
+                    x1="0.72265"
+                    y1="24.584"
+                    x2="15.7226"
+                    y2="14.584"
+                  ></line>
+                  <line
+                    x1="0.72265"
+                    y1="31.584"
+                    x2="15.7226"
+                    y2="21.584"
+                  ></line>
+                  <line
+                    x1="0.72265"
+                    y1="38.584"
+                    x2="15.7226"
+                    y2="28.584"
+                  ></line>
                 </svg>
               </div>
 
               {/* Transaction Completed */}
               <motion.div
                 className="flex items-center"
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
               >
-                <p className="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">$1M+</p>
+                <p className="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">
+                  $1M+
+                </p>
                 <p className="ml-3 text-sm text-gray-900 font-pj">
                   Transaction
                   <br />
