@@ -1,10 +1,13 @@
-import { FaGoogle, FaGithub } from "react-icons/fa";
+import { FaGoogle, FaGithub, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export function LoginForm({ setSignup }) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <motion.div
-      className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl  mx-auto"
+      className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -28,22 +31,26 @@ export function LoginForm({ setSignup }) {
         </span>
         <hr className="flex-grow border-gray-300" />
       </div>
-      <form>
-        <div className="mb-4">
+      <form onSubmit={() => handleLogin()}>
+        <div className="mb-4 relative">
           <label
             className="block text-gray-700 text-sm font-poppins font-medium mb-1"
             htmlFor="email"
           >
             Email
           </label>
-          <input
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-          />
+          <div className="flex items-center border border-gray-300 rounded-lg px-4 py-3 text-sm font-poppins font-medium focus-within:ring-2 focus-within:ring-blue-500">
+            <FaEnvelope className="text-gray-500 mr-3" />
+            <input
+              className="w-full outline-none"
+              id="email"
+              type="email"
+              placeholder="m@example.com"
+              autoComplete="off"
+            />
+          </div>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <div className="flex justify-between items-center">
             <label
               className="block text-gray-700 text-sm font-poppins font-medium"
@@ -58,12 +65,23 @@ export function LoginForm({ setSignup }) {
               Forgot your password?
             </a>
           </div>
-          <input
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 mt-1 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="password"
-            type="password"
-            placeholder="••••••••"
-          />
+          <div className="flex items-center border border-gray-300 rounded-lg px-4 py-3 mt-1 text-sm font-poppins font-medium focus-within:ring-2 focus-within:ring-blue-500">
+            <FaLock className="text-gray-500 mr-3" />
+            <input
+              className="w-full outline-none"
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              autoComplete="off"
+            />
+            <button
+              type="button"
+              className="focus:outline-none"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash className="text-gray-500" /> : <FaEye className="text-gray-500" />}
+            </button>
+          </div>
         </div>
         <button
           className="w-full bg-black text-white rounded-lg py-3 text-sm font-poppins font-semibold hover:bg-gray-800 transition-colors duration-300 cursor-pointer"

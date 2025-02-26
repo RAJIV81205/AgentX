@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cors from "cors"
 import { Schema, model } from "mongoose";
 
 dotenv.config();
@@ -8,6 +9,16 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
+
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://yourfrontend.com"],
+  methods: "GET,POST,PUT,DELETE", 
+  allowedHeaders: "Content-Type,Authorization", 
+  credentials: true, 
+};
+
+app.use(cors(corsOptions));
+
 
 
 
@@ -23,12 +34,13 @@ const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   mobile: { type: String, required: true },
+  createdAt: { type: String, default: () => new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }) }
 });
 
 const User = model("User", userSchema);
 
 
-app.post("/user/signup", async (req, res) => {
+app.post("/signup", async (req, res) => {
   try {
     const { name, email, password, mobile } = req.body;
     

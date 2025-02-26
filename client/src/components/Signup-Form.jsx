@@ -1,10 +1,48 @@
-import { FaGoogle, FaGithub } from "react-icons/fa";
+import { FaGoogle, FaGithub, FaUser, FaMobileAlt, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 function SignupForm({ setSignup }) {
+  const [showPassword, setShowPassword] = useState(false);
+  let navigate = useNavigate();
+
+  const handleSignup = async (event) => {
+    event.preventDefault();
+    const name = event.target.name.value;
+    const mobile = event.target.mobile.value;
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+
+    const signupData = { name, mobile, email, password };
+    const url = import.meta.env.VITE_BACKEND;
+
+    try {
+      const response = await fetch(`${url}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signupData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Signup failed');
+      }
+
+      const data = await response.json();
+      console.log('Signup successful:', data);
+      navigate("/")
+      
+    } catch (error) {
+      console.error('Error during signup:', error);
+   
+    }
+  };
+
   return (
     <motion.div
-      className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl  mx-auto"
+      className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -23,42 +61,78 @@ function SignupForm({ setSignup }) {
       </button>
       <div className="flex items-center mb-6">
         <hr className="flex-grow border-gray-300" />
-        <span className="mx-3 text-gray-500 text-sm font-poppins font-medium">Or continue with</span>
+        <span className="mx-3 text-gray-500 text-sm font-poppins font-medium">
+          Or continue with
+        </span>
         <hr className="flex-grow border-gray-300" />
       </div>
-      <form>
-        <div className="mb-4">
+      <form onSubmit={handleSignup}>
+        <div className="mb-4 relative">
           <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="name">
             Full Name
           </label>
-          <input
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="name"
-            type="text"
-            placeholder="John Doe"
-          />
+          <div className="relative">
+            <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <input
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="name"
+              type="text"
+              placeholder="John Doe"
+              autoComplete="off"
+            />
+          </div>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
+          <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="mobile">
+            Mobile
+          </label>
+          <div className="relative">
+            <FaMobileAlt className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <input
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="mobile"
+              type="tel"
+              placeholder="9876543219"
+              autoComplete="off"
+            />
+          </div>
+        </div>
+        <div className="mb-4 relative">
           <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="email">
             Email
           </label>
-          <input
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-          />
+          <div className="relative">
+            <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <input
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="email"
+              type="email"
+              placeholder="m@example.com"
+              autoComplete="off"
+            />
+          </div>
         </div>
-        <div className="mb-6">
+        <div className="mb-6 relative">
           <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="password">
             Password
           </label>
-          <input
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="password"
-            type="password"
-            placeholder="••••••••"
-          />
+          <div className="relative">
+            <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <input
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-12 py-3 text-sm font-poppins font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              autoComplete="off"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
         </div>
         <button
           className="w-full bg-black text-white rounded-lg py-3 text-sm font-poppins font-semibold hover:bg-gray-800 transition-colors duration-300 cursor-pointer"
