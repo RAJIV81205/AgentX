@@ -1,14 +1,24 @@
-import { FaGoogle, FaGithub, FaUser, FaMobileAlt, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaGoogle,
+  FaGithub,
+  FaUser,
+  FaMobileAlt,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 function SignupForm({ setSignup }) {
   const [showPassword, setShowPassword] = useState(false);
-  let navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const name = event.target.name.value;
     const mobile = event.target.mobile.value;
     const email = event.target.email.value;
@@ -19,34 +29,55 @@ function SignupForm({ setSignup }) {
 
     try {
       const response = await fetch(`${url}/signup`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(signupData),
       });
 
       if (!response.ok) {
-        throw new Error('Signup failed');
+        throw new Error("Signup failed");
       }
 
       const data = await response.json();
-      console.log('Signup successful:', data);
-      navigate("/")
-      
+      console.log("Signup successful:", data);
+      Swal.fire({
+        icon: "success",
+        title: "Signup Successful",
+        text: "Welcome to AgentX!",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        timer: 3000,
+      }).then(() => {
+        window.location.reload();
+      });
     } catch (error) {
-      console.error('Error during signup:', error);
-   
+      console.error("Error during signup:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Signup Failed",
+        text: "Please try again later",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <motion.div
-      className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto"
+      className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto relative"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {isLoading && (
+        <div className="absolute inset-0 bg-black opacity-50 flex justify-center items-center z-50">
+          <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 animate-spin"></div>
+        </div>
+      )}
       <h3 className="text-center text-2xl font-bold mb-4 font-poppins text-gray-800">
         Create an Account
       </h3>
@@ -68,7 +99,10 @@ function SignupForm({ setSignup }) {
       </div>
       <form onSubmit={handleSignup}>
         <div className="mb-4 relative">
-          <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="name">
+          <label
+            className="block text-gray-700 text-sm font-poppins font-medium mb-1"
+            htmlFor="name"
+          >
             Full Name
           </label>
           <div className="relative">
@@ -83,7 +117,10 @@ function SignupForm({ setSignup }) {
           </div>
         </div>
         <div className="mb-4 relative">
-          <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="mobile">
+          <label
+            className="block text-gray-700 text-sm font-poppins font-medium mb-1"
+            htmlFor="mobile"
+          >
             Mobile
           </label>
           <div className="relative">
@@ -98,7 +135,10 @@ function SignupForm({ setSignup }) {
           </div>
         </div>
         <div className="mb-4 relative">
-          <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="email">
+          <label
+            className="block text-gray-700 text-sm font-poppins font-medium mb-1"
+            htmlFor="email"
+          >
             Email
           </label>
           <div className="relative">
@@ -113,7 +153,10 @@ function SignupForm({ setSignup }) {
           </div>
         </div>
         <div className="mb-6 relative">
-          <label className="block text-gray-700 text-sm font-poppins font-medium mb-1" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-poppins font-medium mb-1"
+            htmlFor="password"
+          >
             Password
           </label>
           <div className="relative">
