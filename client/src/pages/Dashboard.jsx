@@ -36,7 +36,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col items-center p-4 w-full bg-gray-50">
+      <div className="min-h-screen flex flex-col items-center p-4 w-full bg-gray-100">
         <div className="bg-white rounded-t-lg  w-full max-w-4xl mt-8">
           {/* Service Selection Header */}
           <div className="flex flex-wrap justify-between px-6 py-4">

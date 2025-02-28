@@ -5,12 +5,13 @@ import { FiClock } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
 
 const Flights = () => {
+  const today = new Date().toISOString().split("T")[0];
   const [tripType, setTripType] = useState("One Way");
   const [fromCity, setFromCity] = useState("");
   const [toCity, setToCity] = useState("");
   const [fromCode, setFromCode] = useState("BOM");
   const [toCode, setToCode] = useState("BLR");
-  const [departureDate, setDepartureDate] = useState("");
+  const [departureDate, setDepartureDate] = useState(today);
   const [returnDate, setReturnDate] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -18,7 +19,7 @@ const Flights = () => {
   const [toSuggestions, setToSuggestions] = useState([]);
   const [hoveredFlightId, setHoveredFlightId] = useState(null);
 
-  const today = new Date().toISOString().split("T")[0];
+
 
   const fetchSuggestions = async (input, setSuggestions) => {
     if (input.length < 3) {
@@ -162,7 +163,7 @@ const Flights = () => {
   };
 
   return (
-    <div className="">
+    <div>
       <form
         onSubmit={handleSearch}
         className="bg-white p-10 rounded-xl shadow-lg"
@@ -189,7 +190,7 @@ const Flights = () => {
             <span>Round Trip</span>
           </label>
 
-          <div className="ml-auto text-gray-700">
+          <div className="ml-auto text-gray-700 font-poppins">
             Book International and Domestic Flights
           </div>
         </div>
@@ -397,7 +398,7 @@ const Flights = () => {
                   </div>
 
                   {/* Price and CTA */}
-                  <div className="flex flex-col items-end">
+                  <div className="flex flex-col items-center">
                     <div className="font-bold text-xl text-gray-900">{flight.price}</div>
                     <button
                       className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer ${
