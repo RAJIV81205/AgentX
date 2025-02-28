@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { FaExchangeAlt } from "react-icons/fa";
+import { FiArrowRight } from "react-icons/fi"; 
+import { FiClock } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
 
 const Flights = () => {
   const [tripType, setTripType] = useState("One Way");
@@ -13,6 +16,7 @@ const Flights = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [fromSuggestions, setFromSuggestions] = useState([]);
   const [toSuggestions, setToSuggestions] = useState([]);
+  const [hoveredFlightId, setHoveredFlightId] = useState(null);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -158,221 +162,274 @@ const Flights = () => {
   };
 
   return (
-    <form onSubmit={handleSearch}>
-      <div className="flex gap-8 mb-6 mt-2">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            name="tripType"
-            checked={tripType === "One Way"}
-            onChange={() => setTripType("One Way")}
-            className="w-4 h-4 accent-blue-500"
-          />
-          <span>One Way</span>
-        </label>
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            name="tripType"
-            checked={tripType === "Round Trip"}
-            onChange={() => setTripType("Round Trip")}
-            className="w-4 h-4"
-          />
-          <span>Round Trip</span>
-        </label>
-        
-        <div className="ml-auto text-gray-700">
-          Book International and Domestic Flights
-        </div>
-      </div>
+    <div className="">
+      <form
+        onSubmit={handleSearch}
+        className="bg-white p-10 rounded-xl shadow-lg"
+      >
+        <div className="flex gap-8 mb-6 mt-2 ">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="tripType"
+              checked={tripType === "One Way"}
+              onChange={() => setTripType("One Way")}
+              className="w-4 h-4 accent-gray-900"
+            />
+            <span>One Way</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="tripType"
+              checked={tripType === "Round Trip"}
+              onChange={() => setTripType("Round Trip")}
+              className="w-4 h-4"
+            />
+            <span>Round Trip</span>
+          </label>
 
-      <div className="grid grid-cols-3 gap-2 mb-6 relative">
-        <div className="col-span-1 border rounded-md p-4 relative">
-          <div className="text-sm text-gray-500">From</div>
-          <input
-            className="text-2xl font-bold focus:outline-0 w-full"
-            maxLength={20}
-            placeholder="Mumbai"
-            value={fromCity}
-            onChange={handleFromCityChange}
-            required
-          />
-          <div className="text-sm text-gray-500 truncate">{fromCode}</div>
-          {fromSuggestions.length > 0 && (
-            <ul className="absolute z-10 w-full bg-white border rounded-md mt-1 left-0">
-              {fromSuggestions.map((suggestion, index) => (
-                <li
-                  key={index}
-                  className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                  onClick={() =>
-                    handleSuggestionClick(
-                      suggestion,
-                      setFromCity,
-                      setFromCode,
-                      setFromSuggestions
-                    )
-                  }
-                >
-                  {suggestion.name} ({suggestion.code})
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="ml-auto text-gray-700">
+            Book International and Domestic Flights
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 mb-6 relative">
+          <div className="col-span-1 border rounded-md p-4 relative">
+            <div className="text-sm text-gray-500">From</div>
+            <input
+              className="text-2xl font-bold focus:outline-0 w-full font-poppins"
+              maxLength={20}
+              placeholder="Mumbai"
+              value={fromCity}
+              onChange={handleFromCityChange}
+              required
+            />
+            <div className="text-sm text-gray-500 truncate">{fromCode}</div>
+            {fromSuggestions.length > 0 && (
+              <ul className="absolute z-10 w-full bg-white border rounded-md mt-1 left-0">
+                {fromSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    onClick={() =>
+                      handleSuggestionClick(
+                        suggestion,
+                        setFromCity,
+                        setFromCode,
+                        setFromSuggestions
+                      )
+                    }
+                  >
+                    {suggestion.name} ({suggestion.code})
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={swapCities}
+            className="absolute left-1/3 top-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border p-2 z-10 hover:shadow-md transition-shadow"
+            aria-label="Swap cities"
+          >
+            <FaExchangeAlt />
+          </button>
+
+          <div className="col-span-1 border rounded-md p-4 relative">
+            <div className="text-sm text-gray-500">To</div>
+            <input
+              className="text-2xl font-bold focus:outline-0 w-full font-poppins"
+              maxLength={20}
+              placeholder="Bengaluru"
+              value={toCity}
+              onChange={handleToCityChange}
+              required
+            />
+            <div className="text-sm text-gray-500 truncate">{toCode}</div>
+            {toSuggestions.length > 0 && (
+              <ul className="absolute z-10 w-full bg-white border rounded-md mt-1 left-0">
+                {toSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    onClick={() =>
+                      handleSuggestionClick(
+                        suggestion,
+                        setToCity,
+                        setToCode,
+                        setToSuggestions
+                      )
+                    }
+                  >
+                    {suggestion.name} ({suggestion.code})
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="col-span-1 border rounded-md p-4">
+            <div className="text-sm text-gray-500">Departure</div>
+            <input
+              type="date"
+              className="text-xl font-bold focus:outline-0 w-full"
+              value={departureDate}
+              onChange={(e) => setDepartureDate(e.target.value)}
+              min={today}
+              required
+            />
+            {tripType === "Round Trip" && (
+              <div className="mt-2">
+                <div className="text-sm text-gray-500">Return</div>
+                <input
+                  type="date"
+                  className="text-xl font-bold focus:outline-0 w-full"
+                  value={returnDate}
+                  onChange={(e) => setReturnDate(e.target.value)}
+                  min={departureDate || today}
+                  required={tripType === "Round Trip"}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         <button
-          type="button"
-          onClick={swapCities}
-          className="absolute left-1/3 top-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border p-2 z-10 hover:shadow-md transition-shadow"
-          aria-label="Swap cities"
+          type="submit"
+          className="w-full bg-gray-900 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-md text-lg transition-colors font-montserrat"
+          disabled={isSearching}
         >
-          <FaExchangeAlt />
+          {isSearching ? "SEARCHING..." : "SEARCH"}
         </button>
-
-        <div className="col-span-1 border rounded-md p-4 relative">
-          <div className="text-sm text-gray-500">To</div>
-          <input
-            className="text-2xl font-bold focus:outline-0 w-full"
-            maxLength={20}
-            placeholder="Bengaluru"
-            value={toCity}
-            onChange={handleToCityChange}
-            required
-          />
-          <div className="text-sm text-gray-500 truncate">{toCode}</div>
-          {toSuggestions.length > 0 && (
-            <ul className="absolute z-10 w-full bg-white border rounded-md mt-1 left-0">
-              {toSuggestions.map((suggestion, index) => (
-                <li
-                  key={index}
-                  className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                  onClick={() =>
-                    handleSuggestionClick(
-                      suggestion,
-                      setToCity,
-                      setToCode,
-                      setToSuggestions
-                    )
-                  }
-                >
-                  {suggestion.name} ({suggestion.code})
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="col-span-1 border rounded-md p-4">
-          <div className="text-sm text-gray-500">Departure</div>
-          <input
-            type="date"
-            className="text-xl font-bold focus:outline-0 w-full"
-            value={departureDate}
-            onChange={(e) => setDepartureDate(e.target.value)}
-            min={today}
-            required
-          />
-          {tripType === "Round Trip" && (
-            <div className="mt-2">
-              <div className="text-sm text-gray-500">Return</div>
-              <input
-                type="date"
-                className="text-xl font-bold focus:outline-0 w-full"
-                value={returnDate}
-                onChange={(e) => setReturnDate(e.target.value)}
-                min={departureDate || today}
-                required={tripType === "Round Trip"}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-md text-lg transition-colors"
-        disabled={isSearching}
-      >
-        {isSearching ? "SEARCHING..." : "SEARCH"}
-      </button>
-
-      {/* Display search results */}
+      </form>
       {searchResults.length > 0 && (
-        <div className="mt-8" id="search-results">
-          <h2 className="text-xl font-bold mb-4">Flight Results</h2>
-          <div className="space-y-4">
-            {searchResults.map((flight) => (
-              <div
-                key={flight.id}
-                className="border rounded-md p-4 hover:shadow-md transition-shadow"
-              >
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <img
-                      src={flight.airlineLogo}
-                      alt={flight.airline}
-                      className="w-8 h-8 mr-2"
-                    />
+        <div className="w-full animate-fade-in mt-10" id="search-results">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">Flight Results</h2>
+          <div className="text-sm text-gray-500">
+            <span className="inline-flex items-center bg-gray-100 px-2.5 py-0.5 rounded-full text-sm font-medium text-gray-800">
+              {searchResults.length} flights found
+            </span>
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          {searchResults.map((flight) => (
+            <div
+              key={flight.id}
+              className={`relative rounded-xl transition-all duration-300 ease-in-out overflow-hidden cursor-pointer ${
+                hoveredFlightId === flight.id
+                  ? "shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border-transparent"
+                  : "border border-gray-200 bg-white"
+              }`}
+              onMouseEnter={() => setHoveredFlightId(flight.id)}
+              onMouseLeave={() => setHoveredFlightId(null)}
+            >
+              <div className="p-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  {/* Airline Info */}
+                  <div className="flex items-center space-x-3">
+                    <div className="relative h-12 w-12 rounded-full overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
+                      <img
+                        src={flight.airlineLogo}
+                        alt={flight.airline}
+                        className="object-contain h-8 w-8"
+                      />
+                    </div>
                     <div>
-                      <div className="font-bold">{flight.airline}</div>
-                      <div className="text-sm text-gray-500">
-                        {flight.flightNumber}
+                      <div className="font-medium text-gray-900">{flight.airline}</div>
+                      <div className="text-sm text-gray-500">{flight.flightNumber}</div>
+                    </div>
+                  </div>
+
+                  {/* Flight Times */}
+                  <div className="flex items-center space-x-6">
+                    {/* Departure */}
+                    <div className="text-center">
+                      <div className="text-xl font-semibold text-gray-900">
+                        {new Date(flight.departure).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                      <div className="text-sm text-gray-500 mt-1">{flight.origin}</div>
+                    </div>
+
+                    {/* Duration */}
+                    <div className="flex flex-col items-center w-40">
+                      <div className="text-xs text-gray-500 mb-1">
+                        {Math.floor(flight.duration / 60)}h {flight.duration % 60}m
+                      </div>
+                      <div className="w-full flex items-center">
+                        <div className="h-0.5 bg-gray-200 flex-1"></div>
+                        <div className="flex-shrink-0 mx-1">
+                          <FiArrowRight className="h-3 w-3 text-gray-400" />
+                        </div>
+                        <div className="h-0.5 bg-gray-200 flex-1"></div>
+                      </div>
+                      <div className="flex items-center mt-1">
+                        {flight.direct ? (
+                          <span className="flex items-center text-xs text-green-600">
+                            <FiCheck className="h-3 w-3 mr-1" />
+                            Direct
+                          </span>
+                        ) : (
+                          <span className="flex items-center text-xs text-amber-600">
+                            <FiClock className="h-3 w-3 mr-1" />
+                            Connecting
+                          </span>
+                        )}
                       </div>
                     </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-bold">
-                      {new Date(flight.departure).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                    <div className="text-sm text-gray-500">{flight.origin}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm text-gray-500">
-                      {Math.floor(flight.duration / 60)}h {flight.duration % 60}
-                      m
-                    </div>
-                    <div className="border-t border-gray-300 w-24 my-1"></div>
-                    <div className="text-sm text-gray-500">
-                      {flight.direct ? "Direct" : "Connecting"}
+
+                    {/* Arrival */}
+                    <div className="text-center">
+                      <div className="text-xl font-semibold text-gray-900">
+                        {new Date(flight.arrival).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                      <div className="text-sm text-gray-500 mt-1">{flight.destination}</div>
                     </div>
                   </div>
-                  <div className="text-center">
-                    <div className="font-bold">
-                      {new Date(flight.arrival).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {flight.destination}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold text-lg">{flight.price}</div>
+
+                  {/* Price and CTA */}
+                  <div className="flex flex-col items-end">
+                    <div className="font-bold text-xl text-gray-900">{flight.price}</div>
                     <button
-                      className="bg-blue-500 text-white px-4 py-1 rounded-md text-sm mt-2"
-                      onClick={() => {
-                        const date = departureDate;
-                        const formattedDate = date.replace(/-/g, "");
+                      className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer ${
+                        hoveredFlightId === flight.id
+                          ? "bg-black text-white shadow-md transform scale-105"
+                          : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                      }`}
+                      onClick={() => {const formattedDate = departureDate.replace(/-/g, "");
                         window.open(
                           `https://www.skyscanner.co.in/transport/flights/${fromCode}/${toCode}/${formattedDate}/config/${flight.id}?adultsv2=1&cabinclass=economy&childrenv2=&ref=home&rtn=0&preferdirects=false&outboundaltsenabled=false&inboundaltsenabled=false`,
                           "_blank"
-                        );
-                      }}
+                        )}}
                     >
                       Book Now
                     </button>
                   </div>
                 </div>
               </div>
+
+              {/* Progress indicator bar on hover */}
+              <div 
+                className="h-1 bg-black absolute bottom-0 left-0 transition-all duration-700 ease-out"
+                style={{ 
+                  width: hoveredFlightId === flight.id ? '100%' : '0%'
+                }}
+              />
+            </div>
             ))}
           </div>
         </div>
       )}
-    </form>
+    </div>
   );
 };
 
