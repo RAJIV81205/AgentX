@@ -14,9 +14,7 @@ const Flights = () => {
   const [fromSuggestions, setFromSuggestions] = useState([]);
   const [toSuggestions, setToSuggestions] = useState([]);
 
- 
   const today = new Date().toISOString().split("T")[0];
-
 
   const fetchSuggestions = async (input, setSuggestions) => {
     if (input.length < 3) {
@@ -25,20 +23,20 @@ const Flights = () => {
     }
 
     try {
-      const response = await fetch(`https://srv.wego.com/places/search?query=${input}&language=en&min_airports=1&site_code=IN&locales[]=en&locales[]=hi`);
+      const response = await fetch(
+        `https://srv.wego.com/places/search?query=${input}&language=en&min_airports=1&site_code=IN&locales[]=en&locales[]=hi`
+      );
       const data = await response.json();
 
-      // Filter suggestions to include only those of type "airport"
-      const filteredSuggestions = data.filter(item => item.type === "airport" && item.code && item.name);
+      const filteredSuggestions = data.filter(
+        (item) => item.type === "airport" && item.code && item.name
+      );
       setSuggestions(filteredSuggestions);
-      console.log(filteredSuggestions)
-
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
   };
 
-  // Handle city input changes
   const handleFromCityChange = (e) => {
     const value = e.target.value;
     setFromCity(value);
@@ -53,12 +51,16 @@ const Flights = () => {
     fetchSuggestions(value, setToSuggestions);
   };
 
-  const handleSuggestionClick = (suggestion, setCity, setCode, setSuggestions) => {
-    const cityName = suggestion.cityName;
+  const handleSuggestionClick = (
+    suggestion,
+    setCity,
+    setCode,
+    setSuggestions
+  ) => {
+    const cityName = suggestion.name;
     const cityCode = suggestion.code;
-    const airportName = suggestion.name;
     setCity(cityName);
-    setCode(`${cityCode}, ${airportName}`);
+    setCode(cityCode);
     setSuggestions([]);
   };
 
@@ -72,11 +74,29 @@ const Flights = () => {
     setToCode(tempCode);
   };
 
-  // Handle search submission
-  const handleSearch = (e) => {
+  async function getID(code) {
+    const url = `https://skyscanner80.p.rapidapi.com/api/v1/flights/auto-complete?query=${code}`;
+    const options = {
+      method: "GET",
+      headers: {
+        "x-rapidapi-key": "f52750023dmshe3f6d17241873e7p101b5ajsna0eb45d88394",
+        "x-rapidapi-host": "skyscanner80.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      const id = result.data[0].id;
+      return id;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleSearch = async (e) => {
     e.preventDefault();
 
-    // Validate inputs
     if (!fromCity || !toCity || !departureDate) {
       alert("Please fill in all required fields");
       return;
@@ -89,51 +109,52 @@ const Flights = () => {
 
     setIsSearching(true);
 
-    // Simulate API call with setTimeout
-    setTimeout(() => {
-      // Mock search results
-      const mockResults = [
-        {
-          id: 1,
-          airline: "IndiGo",
-          flightNumber: "6E 264",
-          departure: "06:15",
-          arrival: "08:05",
-          duration: "1h 50m",
-          price: 3540,
-          direct: true,
-        },
-        {
-          id: 2,
-          airline: "Air India",
-          flightNumber: "AI 639",
-          departure: "08:40",
-          arrival: "10:45",
-          duration: "2h 05m",
-          price: 4120,
-          direct: true,
-        },
-        {
-          id: 3,
-          airline: "Vistara",
-          flightNumber: "UK 875",
-          departure: "10:25",
-          arrival: "12:30",
-          duration: "2h 05m",
-          price: 4580,
-          direct: true,
-        },
-      ];
+    const fromID = await getID(fromCode);
+    const toID = await getID(toCode);
 
-      setSearchResults(mockResults);
-      setIsSearching(false);
+    const url = `https://skyscanner80.p.rapidapi.com/api/v1/flights/search-one-way?fromId=${fromID}&toId=${toID}&departDate=${departureDate}&adults=1&cabinClass=economy&currency=INR&locale=en-US`;
+    const options = {
+      method: "GET",
+      headers: {
+        "x-rapidapi-key": "f52750023dmshe3f6d17241873e7p101b5ajsna0eb45d88394",
+        "x-rapidapi-host": "skyscanner80.p.rapidapi.com",
+      },
+    };
 
-      // Scroll to results
-      const resultsElement = document.getElementById("search-results");
-      if (resultsElement) {
-        resultsElement.scrollIntoView({ behavior: "smooth" });
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+
+      if (result.data && result.data.itineraries) {
+        const formattedResults = result.data.itineraries.map((itinerary) => ({
+          id: itinerary.id,
+          airline: itinerary.legs[0].carriers.marketing[0].name,
+          flightNumber: itinerary.legs[0].segments[0].flightNumber,
+          departure: itinerary.legs[0].segments[0].departure,
+          arrival: itinerary.legs[0].segments[0].arrival,
+          duration: itinerary.legs[0].durationInMinutes,
+          price: itinerary.price.formatted,
+          direct: itinerary.legs[0].stopCount === 0,
+          airlineLogo: itinerary.legs[0].carriers.marketing[0].logoUrl,
+          origin: itinerary.legs[0].origin.name,
+          destination: itinerary.legs[0].destination.name,
+          id: itinerary.id,
+        }));
+
+        setSearchResults(formattedResults);
+      } else {
+        setSearchResults([]);
       }
-    }, 1500);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsSearching(false);
+
+    const resultsElement = document.getElementById("search-results");
+    if (resultsElement) {
+      resultsElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -169,7 +190,9 @@ const Flights = () => {
           />
           <span>Multi City</span>
         </label>
-        <div className="ml-auto text-gray-700">Book International and Domestic Flights</div>
+        <div className="ml-auto text-gray-700">
+          Book International and Domestic Flights
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-2 mb-6 relative">
@@ -190,7 +213,14 @@ const Flights = () => {
                 <li
                   key={index}
                   className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSuggestionClick(suggestion, setFromCity, setFromCode, setFromSuggestions)}
+                  onClick={() =>
+                    handleSuggestionClick(
+                      suggestion,
+                      setFromCity,
+                      setFromCode,
+                      setFromSuggestions
+                    )
+                  }
                 >
                   {suggestion.name} ({suggestion.code})
                 </li>
@@ -225,7 +255,14 @@ const Flights = () => {
                 <li
                   key={index}
                   className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSuggestionClick(suggestion, setToCity, setToCode, setToSuggestions)}
+                  onClick={() =>
+                    handleSuggestionClick(
+                      suggestion,
+                      setToCity,
+                      setToCode,
+                      setToSuggestions
+                    )
+                  }
                 >
                   {suggestion.name} ({suggestion.code})
                 </li>
@@ -274,28 +311,69 @@ const Flights = () => {
           <h2 className="text-xl font-bold mb-4">Flight Results</h2>
           <div className="space-y-4">
             {searchResults.map((flight) => (
-              <div key={flight.id} className="border rounded-md p-4 hover:shadow-md transition-shadow">
+              <div
+                key={flight.id}
+                className="border rounded-md p-4 hover:shadow-md transition-shadow"
+              >
                 <div className="flex justify-between items-center">
-                  <div>
-                    <div className="font-bold">{flight.airline}</div>
-                    <div className="text-sm text-gray-500">{flight.flightNumber}</div>
+                  <div className="flex items-center">
+                    <img
+                      src={flight.airlineLogo}
+                      alt={flight.airline}
+                      className="w-8 h-8 mr-2"
+                    />
+                    <div>
+                      <div className="font-bold">{flight.airline}</div>
+                      <div className="text-sm text-gray-500">
+                        {flight.flightNumber}
+                      </div>
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="font-bold">{flight.departure}</div>
-                    <div className="text-sm text-gray-500">{fromCity}</div>
+                    <div className="font-bold">
+                      {new Date(flight.departure).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                    <div className="text-sm text-gray-500">{flight.origin}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-sm text-gray-500">{flight.duration}</div>
+                    <div className="text-sm text-gray-500">
+                      {Math.floor(flight.duration / 60)}h {flight.duration % 60}
+                      m
+                    </div>
                     <div className="border-t border-gray-300 w-24 my-1"></div>
-                    <div className="text-sm text-gray-500">{flight.direct ? "Direct" : "Connecting"}</div>
+                    <div className="text-sm text-gray-500">
+                      {flight.direct ? "Direct" : "Connecting"}
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="font-bold">{flight.arrival}</div>
-                    <div className="text-sm text-gray-500">{toCity}</div>
+                    <div className="font-bold">
+                      {new Date(flight.arrival).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {flight.destination}
+                    </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-lg">₹{flight.price}</div>
-                    <button className="bg-blue-500 text-white px-4 py-1 rounded-md text-sm mt-2">Book Now</button>
+                    <div className="font-bold text-lg">{flight.price}</div>
+                    <button
+                      className="bg-blue-500 text-white px-4 py-1 rounded-md text-sm mt-2"
+                      onClick={() => {
+                        const date = departureDate;
+                        const formattedDate = date.replace(/-/g, "");
+                        window.open(
+                          `https://www.skyscanner.co.in/transport/flights/${fromCode}/${toCode}/${formattedDate}/config/${flight.id}?adultsv2=1&cabinclass=economy&childrenv2=&ref=home&rtn=0&preferdirects=false&outboundaltsenabled=false&inboundaltsenabled=false`,
+                          "_blank"
+                        );
+                      }}
+                    >
+                      Book Now
+                    </button>
                   </div>
                 </div>
               </div>
