@@ -180,16 +180,7 @@ const Flights = () => {
           />
           <span>Round Trip</span>
         </label>
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            name="tripType"
-            checked={tripType === "Multi City"}
-            onChange={() => setTripType("Multi City")}
-            className="w-4 h-4"
-          />
-          <span>Multi City</span>
-        </label>
+        
         <div className="ml-auto text-gray-700">
           Book International and Domestic Flights
         </div>
