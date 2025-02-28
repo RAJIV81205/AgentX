@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors"
 import { Schema, model } from "mongoose";
+import puppeteer from 'puppeteer';
 
 dotenv.config();
 const app = express();
@@ -61,7 +62,6 @@ app.post("/signup", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-
 
 
 
