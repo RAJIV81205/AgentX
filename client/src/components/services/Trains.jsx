@@ -114,15 +114,18 @@ const TrainSearch = () => {
       alert("Error fetching train data. Please try again.");
     } finally {
       setIsSearching(false);
+      const resultsElement = document.getElementById("search-results");
+    if (resultsElement) {
+      resultsElement.scrollIntoView({ behavior: "smooth" });
+    }
     }
   };
 
   const formatDuration = (duration) => {
-    const hours = duration.includes("h") ? duration.split("h")[0] + "h " : "";
-    const minutes = duration.includes("m")
-      ? duration.split("m")[0].split("h")[1] + "m"
-      : "";
-    return hours + minutes;
+    let dur = duration.split(":")
+    const hours = dur[0]+"h"
+    const minutes = dur[1]+"m"
+    return hours +" "+ minutes;
   };
 
   const isDayRunning = (train, dayName) => {
@@ -254,9 +257,9 @@ const TrainSearch = () => {
         </button>
       </form>
       {searchResults.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6 " id="search-results">
           <div className="mb-4">
-            <h2 className="text-xl font-bold">
+            <h2 className="text-xl font-bold font-montserrat">
               Trains from {fromCode || "Origin"} to {toCode || "Destination"}
             </h2>
             <p className="text-gray-500">
@@ -266,7 +269,7 @@ const TrainSearch = () => {
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 border-t-1 border-gray-300 pt-2.5">
             {searchResults.map((train) => (
               <div
                 key={train.train_no}
@@ -276,7 +279,7 @@ const TrainSearch = () => {
                 <div className="flex flex-col sm:flex-row justify-between">
                   <div className="flex-1">
                     <div className="flex items-center mb-2">
-                      <h3 className="text-lg font-bold">{train.train_name}</h3>
+                      <h3 className="text-lg font-bold font-poppins text-gray-900">{train.train_name}</h3>
                       <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
                         {train.train_no}
                       </span>
@@ -318,7 +321,7 @@ const TrainSearch = () => {
                     <div className="flex items-center space-x-2">
                       <div className="flex items-center text-sm text-gray-600">
                         <FaClock className="h-4 w-4 mr-1 text-gray-400" />
-                        <span>{train.duration}</span>
+                        <span>{formatDuration(train.duration)}</span>
                       </div>
                     </div>
 
