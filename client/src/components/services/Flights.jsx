@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaExchangeAlt } from "react-icons/fa";
-import { FiArrowRight } from "react-icons/fi"; 
+import { FiArrowRight } from "react-icons/fi";
 import { FiClock } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
 
@@ -18,8 +18,6 @@ const Flights = () => {
   const [fromSuggestions, setFromSuggestions] = useState([]);
   const [toSuggestions, setToSuggestions] = useState([]);
   const [hoveredFlightId, setHoveredFlightId] = useState(null);
-
-
 
   const fetchSuggestions = async (input, setSuggestions) => {
     if (input.length < 3) {
@@ -166,7 +164,7 @@ const Flights = () => {
     <div>
       <form
         onSubmit={handleSearch}
-        className="bg-white p-10 rounded-xl shadow-lg"
+        className=" max-w-7xl bg-white p-10 rounded-xl shadow-lg"
       >
         <div className="flex gap-8 mb-6 mt-2 ">
           <label className="flex items-center gap-2 cursor-pointer">
@@ -307,125 +305,140 @@ const Flights = () => {
       </form>
       {searchResults.length > 0 && (
         <div className="w-full animate-fade-in mt-10" id="search-results">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Flight Results</h2>
-          <div className="text-sm text-gray-500">
-            <span className="inline-flex items-center bg-gray-100 px-2.5 py-0.5 rounded-full text-sm font-medium text-gray-800">
-              {searchResults.length} flights found
-            </span>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Flight Results
+            </h2>
+            <div className="text-sm text-gray-500">
+              <span className="inline-flex items-center bg-gray-100 px-2.5 py-0.5 rounded-full text-sm font-medium text-gray-800">
+                {searchResults.length} flights found
+              </span>
+            </div>
           </div>
-        </div>
-        
-        <div className="space-y-4">
-          {searchResults.map((flight) => (
-            <div
-              key={flight.id}
-              className={`relative rounded-xl transition-all duration-300 ease-in-out overflow-hidden cursor-pointer ${
-                hoveredFlightId === flight.id
-                  ? "shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border-transparent"
-                  : "border border-gray-200 bg-white"
-              }`}
-              onMouseEnter={() => setHoveredFlightId(flight.id)}
-              onMouseLeave={() => setHoveredFlightId(null)}
-            >
-              <div className="p-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  {/* Airline Info */}
-                  <div className="flex items-center space-x-3">
-                    <div className="relative h-12 w-12 rounded-full overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
-                      <img
-                        src={flight.airlineLogo}
-                        alt={flight.airline}
-                        className="object-contain h-8 w-8"
-                      />
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900">{flight.airline}</div>
-                      <div className="text-sm text-gray-500">{flight.flightNumber}</div>
-                    </div>
-                  </div>
 
-                  {/* Flight Times */}
-                  <div className="flex items-center space-x-6">
-                    {/* Departure */}
-                    <div className="text-center">
-                      <div className="text-xl font-semibold text-gray-900">
-                        {new Date(flight.departure).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+          <div className="space-y-4">
+            {searchResults.map((flight) => (
+              <div
+                key={flight.id}
+                className={`relative rounded-xl transition-all duration-300 ease-in-out overflow-hidden cursor-pointer ${
+                  hoveredFlightId === flight.id
+                    ? "shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border-transparent"
+                    : "border border-gray-200 bg-white"
+                }`}
+                onMouseEnter={() => setHoveredFlightId(flight.id)}
+                onMouseLeave={() => setHoveredFlightId(null)}
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    {/* Airline Info */}
+                    <div className="flex items-center space-x-3">
+                      <div className="relative h-12 w-12 rounded-full overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
+                        <img
+                          src={flight.airlineLogo}
+                          alt={flight.airline}
+                          className="object-contain h-8 w-8"
+                        />
                       </div>
-                      <div className="text-sm text-gray-500 mt-1">{flight.origin}</div>
-                    </div>
-
-                    {/* Duration */}
-                    <div className="flex flex-col items-center w-40">
-                      <div className="text-xs text-gray-500 mb-1">
-                        {Math.floor(flight.duration / 60)}h {flight.duration % 60}m
-                      </div>
-                      <div className="w-full flex items-center">
-                        <div className="h-0.5 bg-gray-200 flex-1"></div>
-                        <div className="flex-shrink-0 mx-1">
-                          <FiArrowRight className="h-3 w-3 text-gray-400" />
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          {flight.airline}
                         </div>
-                        <div className="h-0.5 bg-gray-200 flex-1"></div>
-                      </div>
-                      <div className="flex items-center mt-1">
-                        {flight.direct ? (
-                          <span className="flex items-center text-xs text-green-600">
-                            <FiCheck className="h-3 w-3 mr-1" />
-                            Direct
-                          </span>
-                        ) : (
-                          <span className="flex items-center text-xs text-amber-600">
-                            <FiClock className="h-3 w-3 mr-1" />
-                            Connecting
-                          </span>
-                        )}
+                        <div className="text-sm text-gray-500">
+                          {flight.flightNumber}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Arrival */}
-                    <div className="text-center">
-                      <div className="text-xl font-semibold text-gray-900">
-                        {new Date(flight.arrival).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                    {/* Flight Times */}
+                    <div className="flex items-center space-x-6">
+                      {/* Departure */}
+                      <div className="text-center">
+                        <div className="text-xl font-semibold text-gray-900">
+                          {new Date(flight.departure).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          {flight.origin}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500 mt-1">{flight.destination}</div>
-                    </div>
-                  </div>
 
-                  {/* Price and CTA */}
-                  <div className="flex flex-col items-center">
-                    <div className="font-bold text-xl text-gray-900">{flight.price}</div>
-                    <button
-                      className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer ${
-                        hoveredFlightId === flight.id
-                          ? "bg-black text-white shadow-md transform scale-105"
-                          : "bg-gray-100 text-gray-900 hover:bg-gray-200"
-                      }`}
-                      onClick={() => {const formattedDate = departureDate.replace(/-/g, "");
-                        window.open(
-                          `https://www.skyscanner.co.in/transport/flights/${fromCode}/${toCode}/${formattedDate}/config/${flight.id}?adultsv2=1&cabinclass=economy&childrenv2=&ref=home&rtn=0&preferdirects=false&outboundaltsenabled=false&inboundaltsenabled=false`,
-                          "_blank"
-                        )}}
-                    >
-                      Book Now
-                    </button>
+                      {/* Duration */}
+                      <div className="flex flex-col items-center w-40">
+                        <div className="text-xs text-gray-500 mb-1">
+                          {Math.floor(flight.duration / 60)}h{" "}
+                          {flight.duration % 60}m
+                        </div>
+                        <div className="w-full flex items-center">
+                          <div className="h-0.5 bg-gray-200 flex-1"></div>
+                          <div className="flex-shrink-0 mx-1">
+                            <FiArrowRight className="h-3 w-3 text-gray-400" />
+                          </div>
+                          <div className="h-0.5 bg-gray-200 flex-1"></div>
+                        </div>
+                        <div className="flex items-center mt-1">
+                          {flight.direct ? (
+                            <span className="flex items-center text-xs text-green-600">
+                              <FiCheck className="h-3 w-3 mr-1" />
+                              Direct
+                            </span>
+                          ) : (
+                            <span className="flex items-center text-xs text-amber-600">
+                              <FiClock className="h-3 w-3 mr-1" />
+                              Connecting
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Arrival */}
+                      <div className="text-center">
+                        <div className="text-xl font-semibold text-gray-900">
+                          {new Date(flight.arrival).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          {flight.destination}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Price and CTA */}
+                    <div className="flex flex-col items-center">
+                      <div className="font-bold text-xl text-gray-900">
+                        {flight.price}
+                      </div>
+                      <button
+                        className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer ${
+                          hoveredFlightId === flight.id
+                            ? "bg-black text-white shadow-md transform scale-105"
+                            : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                        }`}
+                        onClick={() => {
+                          const formattedDate = departureDate.replace(/-/g, "");
+                          window.open(
+                            `https://www.skyscanner.co.in/transport/flights/${fromCode}/${toCode}/${formattedDate}/config/${flight.id}?adultsv2=1&cabinclass=economy&childrenv2=&ref=home&rtn=0&preferdirects=false&outboundaltsenabled=false&inboundaltsenabled=false`,
+                            "_blank"
+                          );
+                        }}
+                      >
+                        Book Now
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Progress indicator bar on hover */}
-              <div 
-                className="h-1 bg-black absolute bottom-0 left-0 transition-all duration-700 ease-out"
-                style={{ 
-                  width: hoveredFlightId === flight.id ? '100%' : '0%'
-                }}
-              />
-            </div>
+                {/* Progress indicator bar on hover */}
+                <div
+                  className="h-1 bg-black absolute bottom-0 left-0 transition-all duration-700 ease-out"
+                  style={{
+                    width: hoveredFlightId === flight.id ? "100%" : "0%",
+                  }}
+                />
+              </div>
             ))}
           </div>
         </div>

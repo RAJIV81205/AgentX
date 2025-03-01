@@ -156,7 +156,7 @@ const TrainSearch = () => {
   return (
     <div className="p-4 pt-0">
       <form
-        className="bg-white rounded-xl shadow-lg p-6 md:p-10"
+        className="bg-white rounded-xl shadow-lg p-6 md:p-10 max-w-7xl"
         onSubmit={handleTrainSearch}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 relative">

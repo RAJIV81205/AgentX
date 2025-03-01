@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { FaPlane, FaTrain } from "react-icons/fa";
+import { FaPlane, FaTrain , FaBuilding } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 
 import Flights from "../components/services/Flights";
-// import HotelsService from "./services/HotelsService";
+import Hotels from "../components/services/Hotels";
 // import HomestaysService from "./services/HomestaysService";
 // import HolidayService from "./services/HolidayService";
 import TrainSearch from "../components/services/Trains";
@@ -14,7 +14,7 @@ const Dashboard = () => {
   const [selectedService, setSelectedService] = useState("Flights");
   const services = [
     { id: "Flights", icon: FaPlane, label: "Flights", component: Flights },
-    // { id: "Hotels", icon: FaBuilding, label: "Hotels", component: HotelsService },
+    { id: "Hotels", icon: FaBuilding, label: "Hotels", component: Hotels },
     // { id: "Homestays", icon: FaHome, label: "Homestays & Villas", component: HomestaysService },
     // { id: "Holiday", icon: FaUmbrellaBeach, label: "Holiday Packages", component: HolidayService },
     { id: "Trains", icon: FaTrain, label: "Trains", component: TrainSearch },
