@@ -35,7 +35,7 @@ const Hotels = () => {
       );
       const data = await response.json();
       if (response.ok) {
-        const suggestions = data.filter(item => item.type === "city");
+        const suggestions = data.filter((item) => item.type === "city");
         setSuggestions(suggestions);
       }
     } catch (error) {
@@ -49,9 +49,35 @@ const Hotels = () => {
     setSuggestions([]);
   };
 
+  const searchHotel = async (e) => {
+    e.preventDefault();
+    setIsSearching()
+
+    const url =
+      `https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination?query=${city}`;
+    const options = {
+      method: "GET",
+      headers: {
+        "x-rapidapi-key": "f52750023dmshe3f6d17241873e7p101b5ajsna0eb45d88394",
+        "x-rapidapi-host": "booking-com15.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="pt-0 p-2.5">
-      <form className="max-w-7xl bg-white rounded-xl p-10">
+      <form
+        className="max-w-7xl bg-white rounded-xl p-10"
+        onSubmit={searchHotel}
+      >
         <div className="md:grid grid-cols-4 gap-2 mb-6 relative flex flex-col">
           <div className="col-span-1 border rounded-md p-4 relative">
             <div className="text-sm text-gray-500">Destination</div>
@@ -72,7 +98,8 @@ const Hotels = () => {
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
-                    {suggestion.name} , {suggestion.stateEnName || suggestion.countryName}
+                    {suggestion.name} ,{" "}
+                    {suggestion.stateEnName || suggestion.countryName}
                   </li>
                 ))}
               </ul>
