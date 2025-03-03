@@ -5,6 +5,7 @@ import { FiClock } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
 import { FaSpinner } from "react-icons/fa"
 import { FaArrowRight } from "react-icons/fa"
+import { motion, AnimatePresence } from "framer-motion"
 
 const Flights = () => {
   const today = new Date().toISOString().split("T")[0];
@@ -164,7 +165,10 @@ const Flights = () => {
 
   return (
     <div>
-      <form
+      <motion.form
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         onSubmit={handleSearch}
         className=" max-w-7xl bg-white p-10 rounded-xl shadow-lg"
       >
@@ -314,7 +318,7 @@ const Flights = () => {
                     </span>
                   )}
                 </button>
-      </form>
+      </motion.form>
       {searchResults.length > 0 && (
         <div className="w-full animate-fade-in mt-10" id="search-results">
           <div className="flex items-center justify-between mb-6">
