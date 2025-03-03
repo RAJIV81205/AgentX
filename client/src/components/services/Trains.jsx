@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
 import {
   FaExchangeAlt,
   FaCalendarAlt,
@@ -6,6 +8,9 @@ import {
   FaMapMarkerAlt,
   FaUtensils,
 } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const TrainSearch = () => {
   const today = new Date().toISOString().split("T")[0];
@@ -115,28 +120,35 @@ const TrainSearch = () => {
     } finally {
       setIsSearching(false);
       const resultsElement = document.getElementById("search-results");
-    if (resultsElement) {
-      resultsElement.scrollIntoView({ behavior: "smooth" });
-    }
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
   const formatDuration = (duration) => {
-    let dur = duration.split(":")
-    const hours = dur[0]+"h"
-    const minutes = dur[1]+"m"
-    return hours +" "+ minutes;
+    const dur = duration.split(":");
+    const hours = dur[0] + "h";
+    const minutes = dur[1] + "m";
+    return hours + " " + minutes;
   };
 
   const isDayRunning = (train, dayName) => {
     const dayAbbreviations = {
-      "Mon": "Mon", "M": "Mon",
-      "Tue": "Tue", "T": "Tue",
-      "Wed": "Wed", "W": "Wed",
-      "Thu": "Thu", "Th": "Thu",
-      "Fri": "Fri", "F": "Fri",
-      "Sat": "Sat", "S": "Sat",
-      "Sun": "Sun", "Su": "Sun"
+      Mon: "Mon",
+      M: "Mon",
+      Tue: "Tue",
+      T: "Tue",
+      Wed: "Wed",
+      W: "Wed",
+      Thu: "Thu",
+      Th: "Thu",
+      Fri: "Fri",
+      F: "Fri",
+      Sat: "Sat",
+      S: "Sat",
+      Sun: "Sun",
+      Su: "Sun",
     };
 
     const normalizedDayName = dayAbbreviations[dayName] || dayName;
@@ -155,7 +167,10 @@ const TrainSearch = () => {
 
   return (
     <div className="p-4 pt-0">
-      <form
+      <motion.form
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         className="bg-white rounded-xl shadow-lg p-6 md:p-10 max-w-7xl"
         onSubmit={handleTrainSearch}
       >
@@ -250,94 +265,159 @@ const TrainSearch = () => {
 
         <button
           type="submit"
-          className="w-full bg-gray-900 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-md text-lg transition-colors font-montserrat"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
           disabled={isSearching}
         >
-          {isSearching ? "SEARCHING..." : "SEARCH"}
+          {isSearching ? (
+            <span className="flex items-center justify-center">
+              <FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+              SEARCHING...
+            </span>
+          ) : (
+            <span className="flex items-center justify-center">
+              SEARCH TRAINS
+              <FaArrowRight className="ml-2 h-5 w-5" />
+            </span>
+          )}
         </button>
-      </form>
-      {searchResults.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6 " id="search-results">
+      </motion.form>
+      {isSearching ? (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6">
           <div className="mb-4">
-            <h2 className="text-xl font-bold font-montserrat">
-              Trains from {fromCode || "Origin"} to {toCode || "Destination"}
-            </h2>
-            <p className="text-gray-500">
-              {departureDate
-                ? new Date(departureDate).toDateString()
-                : "Select a date"}
-            </p>
+            <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
           </div>
-
-          <div className="space-y-4 border-t-1 border-gray-300 pt-2.5">
-            {searchResults.map((train) => (
+          <div className="space-y-4 border-t border-gray-200 pt-4">
+            {[1, 2, 3].map((_, index) => (
               <div
-                key={train.train_no}
-                className="bg-white border border-gray-100 rounded-xl p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 cursor-pointer"
-                onClick={() => openTrainDetails(train)}
+                key={index}
+                className="bg-white border border-gray-100 rounded-xl p-5"
               >
-                <div className="flex flex-col sm:flex-row justify-between">
+                <div className="flex flex-col sm:flex-row justify-between animate-pulse">
                   <div className="flex-1">
-                    <div className="flex items-center mb-2">
-                      <h3 className="text-lg font-bold font-poppins text-gray-900">{train.train_name}</h3>
-                      <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                        {train.train_no}
-                      </span>
-                      {train.pantry && (
-                        <div className="ml-2 flex items-center text-xs text-gray-600">
-                          <FaUtensils className="h-3 w-3 mr-1" />
-                          <span>Pantry</span>
-                        </div>
-                      )}
-                    </div>
-
+                    <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
                     <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 mt-2">
-                      <div className="min-w-[110px]">
-                        <div className="text-xl font-semibold">{train.std}</div>
-                        <div className="text-sm text-gray-500">
-                          {train.from}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center">
-                        <div className="w-16 sm:w-24 h-[1px] bg-gray-300 relative">
-                          <div className="absolute -top-1.5 w-3 h-3 rounded-full border border-primary bg-white -left-1"></div>
-                          <div className="absolute -top-1.5 w-3 h-3 rounded-full border border-primary bg-white -right-1"></div>
-                        </div>
-                        <div className="mx-2 text-xs text-gray-500">
-                          {formatDuration(train.duration)}
-                        </div>
-                        <div className="w-16 sm:w-24 h-[1px] bg-gray-300"></div>
-                      </div>
-
-                      <div className="min-w-[110px]">
-                        <div className="text-xl font-semibold">{train.arr}</div>
-                        <div className="text-sm text-gray-500">{train.to}</div>
-                      </div>
+                      <div className="h-10 bg-gray-200 rounded w-24"></div>
+                      <div className="flex-1 h-4 bg-gray-200 rounded"></div>
+                      <div className="h-10 bg-gray-200 rounded w-24"></div>
                     </div>
                   </div>
-
                   <div className="mt-4 sm:mt-0 flex flex-row sm:flex-col sm:items-end justify-between sm:justify-center sm:ml-4 sm:min-w-[120px]">
-                    <div className="flex items-center space-x-2">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <FaClock className="h-4 w-4 mr-1 text-gray-400" />
-                        <span>{formatDuration(train.duration)}</span>
+                    <div className="h-4 bg-gray-200 rounded w-20 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        searchResults.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6"
+            id="search-results"
+          >
+            <div className="mb-4">
+              <h2 className="text-xl font-bold font-montserrat">
+                Trains from {fromCode || "Origin"} to {toCode || "Destination"}
+              </h2>
+              <p className="text-gray-500">
+                {departureDate
+                  ? new Date(departureDate).toDateString()
+                  : "Select a date"}
+              </p>
+            </div>
+
+            <div className="space-y-4 border-t-1 border-gray-300 pt-2.5">
+              {searchResults.map((train, index) => (
+                <motion.div
+                  key={train.train_no}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className="bg-white border border-gray-100 rounded-xl p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 cursor-pointer"
+                  onClick={() => openTrainDetails(train)}
+                >
+                  <div className="flex flex-col sm:flex-row justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center mb-2">
+                        <h3 className="text-lg font-bold font-poppins text-gray-900">
+                          {train.train_name}
+                        </h3>
+                        <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                          {train.train_no}
+                        </span>
+                        {train.pantry && (
+                          <div className="ml-2 flex items-center text-xs text-gray-600">
+                            <FaUtensils className="h-3 w-3 mr-1" />
+                            <span>Pantry</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 mt-2">
+                        <div className="min-w-[110px]">
+                          <div className="text-xl font-semibold">
+                            {train.std}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {train.from}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center">
+                          <div className="w-16 sm:w-24 h-[1px] bg-gray-300 relative">
+                            <div className="absolute -top-1.5 w-3 h-3 rounded-full border border-primary bg-white -left-1"></div>
+                            <div className="absolute -top-1.5 w-3 h-3 rounded-full border border-primary bg-white -right-1"></div>
+                          </div>
+                          <div className="mx-2 text-xs text-gray-500">
+                            {formatDuration(train.duration)}
+                          </div>
+                          <div className="w-16 sm:w-24 h-[1px] bg-gray-300"></div>
+                        </div>
+
+                        <div className="min-w-[110px]">
+                          <div className="text-xl font-semibold">
+                            {train.arr}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {train.to}
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-2">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <FaMapMarkerAlt className="h-4 w-4 mr-1 text-gray-400" />
-                        <span>{train.distance}</span>
+                    <div className="mt-4 sm:mt-0 flex flex-row sm:flex-col sm:items-end justify-between sm:justify-center sm:ml-4 sm:min-w-[120px]">
+                      <div className="flex items-center space-x-2">
+                        <div className="flex items-center text-sm text-gray-600">
+                          <FaClock className="h-4 w-4 mr-1 text-gray-400" />
+                          <span>{formatDuration(train.duration)}</span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="sm:mt-2">
-                      <div className="flex items-center justify-end">
-                        <FaCalendarAlt className="h-4 w-4 mr-1 text-gray-400" />
-                        <div className="flex space-x-1">
-                          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-                            (day, index) => {
+                      <div className="flex items-center space-x-2">
+                        <div className="flex items-center text-sm text-gray-600">
+                          <FaMapMarkerAlt className="h-4 w-4 mr-1 text-gray-400" />
+                          <span>{train.distance}</span>
+                        </div>
+                      </div>
+
+                      <div className="sm:mt-2">
+                        <div className="flex items-center justify-end">
+                          <FaCalendarAlt className="h-4 w-4 mr-1 text-gray-400" />
+                          <div className="flex space-x-1">
+                            {[
+                              "Mon",
+                              "Tue",
+                              "Wed",
+                              "Thu",
+                              "Fri",
+                              "Sat",
+                              "Sun",
+                            ].map((day, index) => {
                               const isRunningDay = isDayRunning(train, day);
 
                               return (
@@ -356,155 +436,178 @@ const TrainSearch = () => {
                                   </div>
                                 </div>
                               );
-                            }
-                          )}
+                            })}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )
       )}
 
       {/* Train Details Modal */}
       {isModalOpen && selectedTrain && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl max-w-[550px] w-full max-h-[90vh] overflow-y-auto animate-fadeIn p-4 md:p-6">
-            <div className="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
-              <div>
-                <h2 className="text-xl font-bold flex items-center">
-                  {selectedTrain.train_name}
-                  <span className="ml-2 text-sm font-normal bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                    {selectedTrain.train_no}
-                  </span>
-                </h2>
-                <div className="text-sm text-gray-500">
-                  {selectedTrain.source} to {selectedTrain.destination}
-                </div>
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-500 hover:text-gray-700 text-xl"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="p-4 md:p-6">
-              <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-                <div className="flex flex-col items-center mb-4 md:mb-0">
-                  <div className="text-2xl font-bold">{selectedTrain.std}</div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 15 }}
+              className="bg-white rounded-xl max-w-[550px] w-full max-h-[90vh] overflow-y-auto p-4 md:p-6"
+            >
+              <div className="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-bold flex items-center">
+                    {selectedTrain.train_name}
+                    <span className="ml-2 text-sm font-normal bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                      {selectedTrain.train_no}
+                    </span>
+                  </h2>
                   <div className="text-sm text-gray-500">
-                    {selectedTrain.from}
+                    {selectedTrain.source} to {selectedTrain.destination}
                   </div>
                 </div>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 text-xl"
+                >
+                  ×
+                </button>
+              </div>
 
-                <div className="flex-1 mx-4 flex items-center justify-center">
-                  <div className="h-[1px] bg-gray-300 flex-1 relative">
-                    <div className="absolute -top-1 w-2 h-2 rounded-full bg-primary -left-1"></div>
-
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex flex-col items-center">
-                      <span className="text-sm font-medium">
-                        {selectedTrain.duration}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {selectedTrain.distance}
-                      </span>
+              <div className="p-4 md:p-6">
+                <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+                  <div className="flex flex-col items-center mb-4 md:mb-0">
+                    <div className="text-2xl font-bold">
+                      {selectedTrain.std}
                     </div>
+                    <div className="text-sm text-gray-500">
+                      {selectedTrain.from}
+                    </div>
+                  </div>
 
-                    <div className="absolute -top-1 w-2 h-2 rounded-full bg-primary -right-1"></div>
-                  </div>
-                </div>
+                  <div className="flex-1 mx-4 flex items-center justify-center">
+                    <div className="h-[1px] bg-gray-300 flex-1 relative">
+                      <div className="absolute -top-1 w-2 h-2 rounded-full bg-primary -left-1"></div>
 
-                <div className="flex flex-col items-center">
-                  <div className="text-2xl font-bold">{selectedTrain.arr}</div>
-                  <div className="text-sm text-gray-500">
-                    {selectedTrain.to}
-                  </div>
-                </div>
-              </div>
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                        <span className="text-sm font-medium">
+                          {selectedTrain.duration}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {selectedTrain.distance}
+                        </span>
+                      </div>
 
-              <hr className="my-4" />
+                      <div className="absolute -top-1 w-2 h-2 rounded-full bg-primary -right-1"></div>
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center">
-                  <div className="text-gray-500 mr-2">
-                    <FaClock size={18} />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Duration</div>
-                    <div className="font-medium">{selectedTrain.duration}</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <div className="text-gray-500 mr-2">
-                    <FaMapMarkerAlt size={18} />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Distance</div>
-                    <div className="font-medium">{selectedTrain.distance}</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <div className="text-gray-500 mr-2">
-                    <FaClock size={18} />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Stops</div>
-                    <div className="font-medium">
-                      {selectedTrain.halt} stations
+                  <div className="flex flex-col items-center">
+                    <div className="text-2xl font-bold">
+                      {selectedTrain.arr}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {selectedTrain.to}
                     </div>
                   </div>
                 </div>
 
-                {selectedTrain.pantry && (
+                <hr className="my-4" />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center">
                     <div className="text-gray-500 mr-2">
-                      <FaUtensils size={18} />
+                      <FaClock size={18} />
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">Pantry</div>
-                      <div className="font-medium">Available</div>
+                      <div className="text-sm text-gray-500">Duration</div>
+                      <div className="font-medium">
+                        {selectedTrain.duration}
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
 
-              <hr className="my-4" />
-
-              <div>
-                <div className="flex items-center mb-2">
-                  <FaCalendarAlt size={18} className="mr-2 text-gray-500" />
-                  <h3 className="font-medium">Running Days</h3>
-                </div>
-
-                <div className="grid grid-cols-7 gap-1 mt-2">
-                  {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-                    (day, index) => (
-                      <div key={index} className="text-center">
-                        <div className="text-xs text-gray-500 mb-1">{day}</div>
-                        <div
-                          className={`w-9 h-9 rounded-full flex items-center justify-center mx-auto ${
-                            selectedTrain.run_days.includes(day)
-                              ? "bg-primary/15 text-primary"
-                              : "bg-gray-100 text-gray-400"
-                          }`}
-                        >
-                          {selectedTrain.run_days.includes(day) ? "✓" : "×"}
-                        </div>
+                  <div className="flex items-center">
+                    <div className="text-gray-500 mr-2">
+                      <FaMapMarkerAlt size={18} />
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-500">Distance</div>
+                      <div className="font-medium">
+                        {selectedTrain.distance}
                       </div>
-                    )
+                    </div>
+                  </div>
+
+                  <div className="flex items-center">
+                    <div className="text-gray-500 mr-2">
+                      <FaClock size={18} />
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-500">Stops</div>
+                      <div className="font-medium">
+                        {selectedTrain.halt} stations
+                      </div>
+                    </div>
+                  </div>
+
+                  {selectedTrain.pantry && (
+                    <div className="flex items-center">
+                      <div className="text-gray-500 mr-2">
+                        <FaUtensils size={18} />
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Pantry</div>
+                        <div className="font-medium">Available</div>
+                      </div>
+                    </div>
                   )}
                 </div>
+
+                <hr className="my-4" />
+
+                <div>
+                  <div className="flex items-center mb-2">
+                    <FaCalendarAlt size={18} className="mr-2 text-gray-500" />
+                    <h3 className="font-medium">Running Days</h3>
+                  </div>
+
+                  <div className="grid grid-cols-7 gap-1 mt-2">
+                    {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+                      (day, index) => (
+                        <div key={index} className="text-center">
+                          <div className="text-xs text-gray-500 mb-1">
+                            {day}
+                          </div>
+                          <div
+                            className={`w-9 h-9 rounded-full flex items-center justify-center mx-auto ${
+                              selectedTrain.run_days.includes(day)
+                                ? "bg-primary/15 text-primary"
+                                : "bg-gray-100 text-gray-400"
+                            }`}
+                          >
+                            {selectedTrain.run_days.includes(day) ? "✓" : "×"}
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
       )}
     </div>
   );

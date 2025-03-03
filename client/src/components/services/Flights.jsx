@@ -3,6 +3,8 @@ import { FaExchangeAlt } from "react-icons/fa";
 import { FiArrowRight } from "react-icons/fi";
 import { FiClock } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
+import { FaSpinner } from "react-icons/fa"
+import { FaArrowRight } from "react-icons/fa"
 
 const Flights = () => {
   const today = new Date().toISOString().split("T")[0];
@@ -296,12 +298,22 @@ const Flights = () => {
         </div>
 
         <button
-          type="submit"
-          className="w-full bg-gray-900 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-md text-lg transition-colors font-montserrat"
-          disabled={isSearching}
-        >
-          {isSearching ? "SEARCHING..." : "SEARCH"}
-        </button>
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
+                  disabled={isSearching}
+                >
+                  {isSearching ? (
+                    <span className="flex items-center justify-center">
+                      <FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                      SEARCHING...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center">
+                      SEARCH FLIGHTS
+                      <FaArrowRight className="ml-2 h-5 w-5" />
+                    </span>
+                  )}
+                </button>
       </form>
       {searchResults.length > 0 && (
         <div className="w-full animate-fade-in mt-10" id="search-results">
