@@ -428,9 +428,9 @@ const Flights = () => {
                         {flight.price}
                       </div>
                       <button
-                        className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer ${
+                        className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer font-poppins ${
                           hoveredFlightId === flight.id
-                            ? "bg-black text-white shadow-md transform scale-105"
+                            ? "bg-blue-700 text-white shadow-md transform scale-105"
                             : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                         }`}
                         onClick={() => {
@@ -449,7 +449,7 @@ const Flights = () => {
 
                 {/* Progress indicator bar on hover */}
                 <div
-                  className="h-1 bg-black absolute bottom-0 left-0 transition-all duration-700 ease-out"
+                  className="h-1 bg-blue-700 absolute bottom-0 left-0 transition-all duration-700 ease-out"
                   style={{
                     width: hoveredFlightId === flight.id ? "100%" : "0%",
                   }}
