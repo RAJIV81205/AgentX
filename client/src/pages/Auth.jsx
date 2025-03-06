@@ -1,5 +1,5 @@
 import { Navigate } from "react-router";
-import LoginForm from "../components/login-form";
+import LoginForm from "../components/Login";
 
 import { useState } from "react";
 import SignupForm from "../components/Signup-Form";
