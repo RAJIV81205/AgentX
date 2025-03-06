@@ -102,3 +102,5 @@ export function LoginForm({ setSignup }) {
     </motion.div>
   );
 }
+
+export default LoginForm
