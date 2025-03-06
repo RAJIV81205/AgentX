@@ -174,7 +174,7 @@ const TrainSearch = () => {
         className="bg-white rounded-xl shadow-lg p-6 md:p-10 max-w-7xl"
         onSubmit={handleTrainSearch}
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6 relative">
           <div className="border rounded-md p-4 relative">
             <div className="text-sm text-gray-500">From</div>
             <input
@@ -211,7 +211,7 @@ const TrainSearch = () => {
           <button
             type="button"
             onClick={swapCities}
-            className="absolute left-1/2 top-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border p-2 z-10 hover:shadow-md transition-shadow md:hidden"
+            className="absolute left-1/3 top-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border p-2 z-10 hover:shadow-md transition-shadow hidden md:block"
             aria-label="Swap cities"
           >
             <FaExchangeAlt />

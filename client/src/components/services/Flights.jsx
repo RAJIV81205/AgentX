@@ -144,7 +144,6 @@ const Flights = () => {
           airlineLogo: itinerary.legs[0].carriers.marketing[0].logoUrl,
           origin: itinerary.legs[0].origin.name,
           destination: itinerary.legs[0].destination.name,
-          id: itinerary.id,
         }));
 
         setSearchResults(formattedResults);
@@ -199,7 +198,7 @@ const Flights = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 mb-6 relative">
+        <div className="md:grid grid-cols-3 gap-2 mb-6 relative flex flex-col">
           <div className="col-span-1 border rounded-md p-4 relative">
             <div className="text-sm text-gray-500">From</div>
             <input
@@ -236,7 +235,7 @@ const Flights = () => {
           <button
             type="button"
             onClick={swapCities}
-            className="absolute left-1/3 top-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border p-2 z-10 hover:shadow-md transition-shadow"
+            className="absolute left-1/3 top-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full border p-2 z-10 hover:shadow-md transition-shadow hidden md:block"
             aria-label="Swap cities"
           >
             <FaExchangeAlt />
