@@ -38,8 +38,8 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col items-center p-4 w-full bg-gray-100">
-        <div className="bg-white rounded-t-lg  w-full max-w-4xl mt-8">
+      <div className="min-h-screen flex flex-col items-center p-4 w-full bg-white">
+        <div className="bg-blue-50 rounded-t-lg  w-full max-w-4xl mt-8 border border-blue-300 border-b-0">
           {/* Service Selection Header */}
           <div className="flex flex-wrap justify-between px-6 py-4">
             {services.map((service) => (
@@ -49,14 +49,14 @@ const Dashboard = () => {
                 className={`flex flex-col items-center p-3 ${
                   selectedService === service.id
                     ? "border-b-2 border-blue-950"
-                    : "hover:bg-gray-50"
+                    : "hover:bg-blue-100"
                 }`}
               >
                 <service.icon
                   className={
                     selectedService === service.id
                       ? "text-blue-950"
-                      : "text-gray-300"
+                      : "text-blue-300"
                   }
                   size={24}
                 />
@@ -64,7 +64,7 @@ const Dashboard = () => {
                   className={`text-sm mt-1 ${
                     selectedService === service.id
                       ? "text-blue-950 font-poppins"
-                      : "text-gray-600 font-poppins"
+                      : "text-blue-600 font-poppins"
                   }`}
                 >
                   {service.label}

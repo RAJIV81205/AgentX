@@ -171,7 +171,7 @@ const TrainSearch = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-xl shadow-lg p-6 md:p-10 max-w-7xl"
+        className="bg-blue-50 rounded-xl border border-blue-300 shadow-lg p-6 md:p-10 max-w-7xl"
         onSubmit={handleTrainSearch}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6 relative">

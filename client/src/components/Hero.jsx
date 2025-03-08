@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router";
 
 function Hero() {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
   return (
     <section className="relative py-12 sm:py-16 lg:py-15 lg:pb-36">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">

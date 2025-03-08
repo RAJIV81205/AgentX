@@ -129,7 +129,7 @@ const Hotels = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-xl shadow-lg p-6 md:p-10 max-w-7xl" onSubmit={searchHotel}>
+        className="bg-blue-50 rounded-xl border border-blue-300 shadow-lg p-6 md:p-10 max-w-7xl" onSubmit={searchHotel}>
         <div className="md:grid grid-cols-4 gap-2 mb-6 relative flex flex-col">
           <div className="col-span-1 border rounded-md p-4 relative">
             <div className="text-sm text-gray-500">Destination</div>

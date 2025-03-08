@@ -169,7 +169,7 @@ const Flights = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         onSubmit={handleSearch}
-        className=" max-w-7xl bg-white p-10 rounded-xl shadow-lg"
+        className=" max-w-7xl bg-blue-50 p-10 rounded-xl border border-blue-300 shadow-lg"
       >
         <div className="flex gap-8 mb-6 mt-2 ">
           <label className="flex items-center gap-2 cursor-pointer">
@@ -178,7 +178,7 @@ const Flights = () => {
               name="tripType"
               checked={tripType === "One Way"}
               onChange={() => setTripType("One Way")}
-              className="w-4 h-4 accent-gray-900"
+              className="w-4 h-4 accent-blue-900"
             />
             <span>One Way</span>
           </label>
@@ -188,7 +188,7 @@ const Flights = () => {
               name="tripType"
               checked={tripType === "Round Trip"}
               onChange={() => setTripType("Round Trip")}
-              className="w-4 h-4"
+              className="w-4 h-4 accent-blue-900"
             />
             <span>Round Trip</span>
           </label>
