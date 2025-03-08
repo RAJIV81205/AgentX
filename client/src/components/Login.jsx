@@ -1,9 +1,38 @@
 import { FaGoogle, FaGithub, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+
 
 export function LoginForm({ setSignup }) {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+
+  const url = import.meta.env.VITE_BACKEND;
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    console.log(url);
+    const response = await fetch(`${url}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (response.ok) {
+      alert("Login successful");
+      localStorage.setItem("token", JSON.stringify(data.token));
+      navigate("/dashboard");
+    } else {
+      alert(data.message);
+    }
+  };
+  
 
   return (
     <motion.div
@@ -31,7 +60,7 @@ export function LoginForm({ setSignup }) {
         </span>
         <hr className="flex-grow border-gray-300" />
       </div>
-      <form onSubmit={() => handleLogin()}>
+      <form onSubmit={handleLogin}>
         <div className="mb-4 relative">
           <label
             className="block text-gray-700 text-sm font-poppins font-medium mb-1"
