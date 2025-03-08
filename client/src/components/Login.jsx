@@ -14,7 +14,6 @@ export function LoginForm({ setSignup }) {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
-    console.log(url);
     const response = await fetch(`${url}/login`, {
       method: "POST",
       headers: {

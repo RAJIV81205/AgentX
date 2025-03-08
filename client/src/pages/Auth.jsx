@@ -1,15 +1,16 @@
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 import LoginForm from "../components/Login";
 
 import { useState } from "react";
 import SignupForm from "../components/Signup-Form";
 
 function Auth() {
+  const navigate = useNavigate();
   const [signup, setSignup] = useState(false);
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
 
   if (token) {
-    return <Navigate to="/dashboard" replace={true} />;
+    navigate("/dashboard");
   }
 
   return (

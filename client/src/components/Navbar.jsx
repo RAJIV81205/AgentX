@@ -7,7 +7,7 @@ import { HiMenu, HiX } from "react-icons/hi"
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const token = localStorage.getItem("authToken")
+  const token = localStorage.getItem("token")
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)

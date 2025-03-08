@@ -68,7 +68,6 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
   try {
     const user = await User.findOne({ email});
     if (!user) {  
@@ -86,6 +85,15 @@ app.post("/login", async (req, res) => {
 });
 
 
+app.post("/verify-token", async (req, res) => {
+  const { token } = req.body;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.status(200).json({ message: "Token is valid", userId: decoded.userId });
+  } catch (error) {
+    res.status(401).json({ message: "Token is invalid" });
+  }
+});
 
 
 app.listen(PORT, () => {
