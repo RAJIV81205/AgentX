@@ -25,8 +25,8 @@ app.use(cors(corsOptions));
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.error("MongoDB connection error:", err));
+  }).then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 const userSchema = new Schema({
   name: { type: String, required: true },
@@ -72,13 +72,32 @@ app.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "5m" });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
     res.status(200).json({ message: "Login successful", user, token });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
+app.post("/verify-token", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const decodedObj = jwt.verify(token, process.env.JWT_SECRET);
+
+    const { userId } = decodedObj;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.json({ message: "User found", userId: user._id });
+  } catch (err) {
+    console.error("Token Verification Error:", err);
+    res.status(401).json({ message: "Invalid token", error: err.message });
+  }
+});
 
 
 app.listen(PORT, () => {

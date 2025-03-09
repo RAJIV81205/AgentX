@@ -22,36 +22,55 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
+    let isMounted = true;
+
     const verifyToken = async () => {
       const token = localStorage.getItem("token");
+
       if (!token) {
-        navigate("/auth");
+        if (isMounted) navigate("/auth");
         return;
       }
+
       try {
         const response = await fetch(`${url}/verify-token`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token }),
         });
+
         const data = await response.json();
-        if (data.message === "Token is invalid") {
-          navigate("/auth");
+
+        if (isMounted) {
+          if (data.message === "Invalid token") {
+            navigate("/auth");
+          } else {
+            setIsLoading(false);
+          }
         }
       } catch (error) {
-        console.error(error);
-        navigate("/auth");
+        console.error("Token verification failed:", error);
+        if (isMounted) {
+          navigate("/auth");
+        }
       }
-      setIsLoading(false);
     };
+
     verifyToken();
+
+    return () => {
+      isMounted = false;
+      setIsLoading(true);
+    };
   }, [navigate, url]);
+
 
   const handleServiceChange = (serviceId) => {
     setSelectedService(serviceId);
   };
 
-  const SelectedComponent = services.find((s) => s.id === selectedService)?.component || Flights;
+  const SelectedComponent =
+    services.find((s) => s.id === selectedService)?.component || Flights;
 
   return isLoading ? (
     <div className="flex justify-center items-center h-screen">
@@ -67,10 +86,29 @@ const Dashboard = () => {
               <button
                 key={service.id}
                 onClick={() => handleServiceChange(service.id)}
-                className={`flex flex-col items-center p-3 ${selectedService === service.id ? "border-b-2 border-blue-950" : "hover:bg-blue-100"}`}
+                className={`flex flex-col items-center p-3 ${
+                  selectedService === service.id
+                    ? "border-b-2 border-blue-950"
+                    : "hover:bg-blue-100"
+                }`}
               >
-                <service.icon className={selectedService === service.id ? "text-blue-950" : "text-blue-300"} size={24} />
-                <span className={`text-sm mt-1 ${selectedService === service.id ? "text-blue-950 font-poppins" : "text-blue-600 font-poppins"}`}>{service.label}</span>
+                <service.icon
+                  className={
+                    selectedService === service.id
+                      ? "text-blue-950"
+                      : "text-blue-300"
+                  }
+                  size={24}
+                />
+                <span
+                  className={`text-sm mt-1 ${
+                    selectedService === service.id
+                      ? "text-blue-950 font-poppins"
+                      : "text-blue-600 font-poppins"
+                  }`}
+                >
+                  {service.label}
+                </span>
               </button>
             ))}
           </div>

@@ -1,8 +1,14 @@
-import { FaGoogle, FaGithub, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaGoogle,
+  FaGithub,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-
 
 export function LoginForm({ setSignup }) {
   const navigate = useNavigate();
@@ -14,24 +20,31 @@ export function LoginForm({ setSignup }) {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const response = await fetch(`${url}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    console.log(data);
-    if (response.ok) {
-      alert("Login successful");
-      localStorage.setItem("token", JSON.stringify(data.token));
-      navigate("/dashboard");
-    } else {
-      alert(data.message);
+
+    try {
+      const response = await fetch(`${url}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (response.ok) {
+        alert("Login successful");
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred during login. Please try again.");
     }
   };
-  
 
   return (
     <motion.div
@@ -75,6 +88,7 @@ export function LoginForm({ setSignup }) {
               type="email"
               placeholder="m@example.com"
               autoComplete="off"
+              required
             />
           </div>
         </div>
@@ -101,13 +115,18 @@ export function LoginForm({ setSignup }) {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               autoComplete="off"
+              required
             />
             <button
               type="button"
               className="focus:outline-none"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <FaEyeSlash className="text-gray-500" /> : <FaEye className="text-gray-500" />}
+              {showPassword ? (
+                <FaEyeSlash className="text-gray-500" />
+              ) : (
+                <FaEye className="text-gray-500" />
+              )}
             </button>
           </div>
         </div>
@@ -131,4 +150,4 @@ export function LoginForm({ setSignup }) {
   );
 }
 
-export default LoginForm
+export default LoginForm;
