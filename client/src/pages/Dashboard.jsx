@@ -9,8 +9,10 @@ import Hotels from "../components/services/Hotels";
 import TrainSearch from "../components/services/Trains";
 
 const Dashboard = () => {
-  
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedService, setSelectedService] = useState("Flights");
+  const navigate = useNavigate();
+  const url = import.meta.env.VITE_BACKEND;
 
   const services = [
     { id: "Flights", icon: FaPlane, label: "Flights", component: Flights },
@@ -19,14 +21,43 @@ const Dashboard = () => {
     { id: "Forex", icon: MdCurrencyExchange, label: "Forex", component: Forex },
   ];
 
-  
+  useEffect(() => {
+    const verifyToken = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/auth");
+        return;
+      }
+      try {
+        const response = await fetch(`${url}/verify-token`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token }),
+        });
+        const data = await response.json();
+        if (data.message === "Token is invalid") {
+          navigate("/auth");
+        }
+      } catch (error) {
+        console.error(error);
+        navigate("/auth");
+      }
+      setIsLoading(false);
+    };
+    verifyToken();
+  }, [navigate, url]);
+
   const handleServiceChange = (serviceId) => {
     setSelectedService(serviceId);
   };
 
   const SelectedComponent = services.find((s) => s.id === selectedService)?.component || Flights;
 
-  return (
+  return isLoading ? (
+    <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  ) : (
     <>
       <Navbar />
       <div className="min-h-screen flex flex-col items-center p-4 w-full bg-white">
