@@ -1,101 +1,114 @@
-"use client"
-
-import { useState } from "react"
-import { FaLocationDot } from "react-icons/fa6"
-import { FaSpinner } from "react-icons/fa"
-import { FaArrowRight } from "react-icons/fa"
-import { motion, AnimatePresence } from "framer-motion"
-import { FaStar, FaMapMarkerAlt, FaRegCalendarAlt, FaRegClock, FaRegUser } from "react-icons/fa"
+import { useState } from "react";
+import { FaLocationDot } from "react-icons/fa6";
+import { FaSpinner } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaStar,
+  FaMapMarkerAlt,
+  FaRegCalendarAlt,
+  FaRegClock,
+  FaRegUser,
+} from "react-icons/fa";
 
 const Hotels = () => {
   const tomorrow = () => {
-    const today = new Date()
-    today.setDate(today.getDate() + 1)
-    return today.toISOString().split("T")[0]
-  }
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
+    return today.toISOString().split("T")[0];
+  };
 
   const dayAfter = () => {
-    const today = new Date()
-    today.setDate(today.getDate() + 2)
-    return today.toISOString().split("T")[0]
-  }
+    const today = new Date();
+    today.setDate(today.getDate() + 2);
+    return today.toISOString().split("T")[0];
+  };
 
-  const [city, setCity] = useState("")
-  const [region, setRegion] = useState("Jammu & Kashmir, India")
-  const [checkinDate, setCheckinDate] = useState(tomorrow())
-  const [checkoutDate, setCheckoutDate] = useState(dayAfter())
-  const [traveller, setTraveller] = useState("1")
-  const [isSearching, setIsSearching] = useState(false)
-  const [suggestions, setSuggestions] = useState([])
-  const [hotelList, setHotelList] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [city, setCity] = useState("");
+  const [region, setRegion] = useState("Jammu & Kashmir, India");
+  const [checkinDate, setCheckinDate] = useState(tomorrow());
+  const [checkoutDate, setCheckoutDate] = useState(dayAfter());
+  const [traveller, setTraveller] = useState("1");
+  const [isSearching, setIsSearching] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [hotelList, setHotelList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleCityChange = (e) => {
-    const value = e.target.value
-    setCity(value)
-    setRegion()
-    fetchSuggestions(e)
-  }
+    const value = e.target.value;
+    setCity(value);
+    setRegion();
+    fetchSuggestions(e);
+  };
 
   const fetchSuggestions = async (e) => {
     try {
       const response = await fetch(
-        `https://srv.wego.com/places/search?locale=en&site_code=IN&query=${e.target.value}&types[]=city&types[]=district&types[]=hotel&types[]=region&min_hotels=1`,
-      )
-      const data = await response.json()
+        `https://srv.wego.com/places/search?locale=en&site_code=IN&query=${e.target.value}&types[]=city&types[]=district&types[]=hotel&types[]=region&min_hotels=1`
+      );
+      const data = await response.json();
       if (response.ok) {
-        const suggestions = data.filter((item) => item.type === "city")
-        setSuggestions(suggestions)
+        const suggestions = data.filter((item) => item.type === "city");
+        setSuggestions(suggestions);
       }
     } catch (error) {
-      console.error("Error fetching suggestions:", error)
+      console.error("Error fetching suggestions:", error);
     }
-  }
+  };
 
   const handleSuggestionClick = (suggestion) => {
-    setCity(suggestion.name)
-    setRegion(suggestion.stateEnName || suggestion.countryName)
-    setSuggestions([])
-  }
+    setCity(suggestion.name);
+    setRegion(suggestion.stateEnName || suggestion.countryName);
+    setSuggestions([]);
+  };
 
   const searchHotel = async (e) => {
-    e.preventDefault()
-    setIsSearching(true)
+    e.preventDefault();
+    setIsSearching(true);
 
-    const url = `https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination?query=${city}`
+    const url = `https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination?query=${city}`;
     const options = {
       method: "GET",
       headers: {
         "x-rapidapi-key": "f52750023dmshe3f6d17241873e7p101b5ajsna0eb45d88394",
         "x-rapidapi-host": "booking-com15.p.rapidapi.com",
       },
-    }
+    };
 
     try {
-      const response = await fetch(url, options)
-      const result = await response.json()
-      const id = result.data[0].dest_id
-      getHotel(id)
+      const response = await fetch(url, options);
+      const result = await response.json();
+      const id = result.data[0].dest_id;
+      getHotel(id);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   async function getHotel(id) {
-    setLoading(true)
-    const url = `https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels?dest_id=${id}&search_type=CITY&arrival_date=${checkinDate}&departure_date=${checkoutDate}&adults=${traveller}&page_number=1&languagecode=en-us&currency_code=INR`
+    setLoading(true);
+
+    // Scroll to search results container immediately when loading starts
+    setTimeout(() => {
+      const resultsElement = document.getElementById("search-results");
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100); // Small timeout to ensure UI updates before scrolling
+
+    const url = `https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels?dest_id=${id}&search_type=CITY&arrival_date=${checkinDate}&departure_date=${checkoutDate}&adults=${traveller}&page_number=1&languagecode=en-us&currency_code=INR`;
     const options = {
       method: "GET",
       headers: {
         "x-rapidapi-key": "f52750023dmshe3f6d17241873e7p101b5ajsna0eb45d88394",
         "x-rapidapi-host": "booking-com15.p.rapidapi.com",
       },
-    }
+    };
 
     try {
-      const response = await fetch(url, options)
-      const hotels = await response.json()
-      console.log(hotels)
+      const response = await fetch(url, options);
+      const hotels = await response.json();
+      console.log(hotels);
       const hotelData = hotels.data.hotels.map((hotel) => ({
         hotel_name: hotel.property.name,
         hotel_id: hotel.hotel_id,
@@ -111,15 +124,16 @@ const Hotels = () => {
         totalPrice:
           (hotel.property.priceBreakdown?.grossPrice?.value ?? 0) +
           (hotel.property.priceBreakdown?.excludedPrice?.value ?? 0),
-      }))
-      console.log(hotelData)
-      setHotelList(hotelData)
-      setLoading(false)
-      setIsSearching(false)
+      }));
+      console.log(hotelData);
+
+      setHotelList(hotelData);
+      setLoading(false);
+      setIsSearching(false);
     } catch (error) {
-      console.error(error)
-      setLoading(false)
-      setIsSearching(false)
+      console.error(error);
+      setLoading(false);
+      setIsSearching(false);
     }
   }
 
@@ -129,7 +143,9 @@ const Hotels = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-blue-50 rounded-xl border border-blue-300 shadow-lg p-6 md:p-10 max-w-7xl" onSubmit={searchHotel}>
+        className="bg-blue-50 rounded-xl border border-blue-300 shadow-lg p-6 md:p-10 max-w-7xl"
+        onSubmit={searchHotel}
+      >
         <div className="md:grid grid-cols-4 gap-2 mb-6 relative flex flex-col">
           <div className="col-span-1 border rounded-md p-4 relative">
             <div className="text-sm text-gray-500">Destination</div>
@@ -218,13 +234,14 @@ const Hotels = () => {
             </span>
           )}
         </button>
-        </motion.form>
+      </motion.form>
       <div className="max-w-7xl mx-auto mt-8">
         <AnimatePresence>
           {loading && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((item) => (
                 <motion.div
+                  id="search-results"
                   key={item}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -265,7 +282,8 @@ const Hotels = () => {
                   }}
                   whileHover={{
                     y: -5,
-                    boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                    boxShadow:
+                      "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
                   }}
                   className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100"
                 >
@@ -278,7 +296,9 @@ const Hotels = () => {
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-400">No image available</span>
+                        <span className="text-gray-400">
+                          No image available
+                        </span>
                       </div>
                     )}
                     {hotel.score && (
@@ -290,7 +310,9 @@ const Hotels = () => {
                   </div>
 
                   <div className="p-4">
-                    <h3 className="font-bold text-xl mb-2 text-gray-800 line-clamp-2">{hotel.hotel_name}</h3>
+                    <h3 className="font-bold text-xl mb-2 text-gray-800 line-clamp-2">
+                      {hotel.hotel_name}
+                    </h3>
 
                     <div className="flex items-center text-gray-600 mb-2">
                       <FaMapMarkerAlt className="mr-1 text-gray-400" />
@@ -330,9 +352,13 @@ const Hotels = () => {
                     <div className="flex justify-between items-center mt-4">
                       <div className="flex items-center">
                         <FaRegUser className="mr-1 text-gray-400" />
-                        <span className="text-sm text-gray-600">{hotel.reviews || 0} reviews</span>
+                        <span className="text-sm text-gray-600">
+                          {hotel.reviews || 0} reviews
+                        </span>
                       </div>
-                      <div className="text-blue-600 font-bold">₹{Math.round(hotel.totalPrice).toLocaleString()}</div>
+                      <div className="text-blue-600 font-bold">
+                        ₹{Math.round(hotel.totalPrice).toLocaleString()}
+                      </div>
                     </div>
 
                     <motion.button
@@ -350,14 +376,19 @@ const Hotels = () => {
         </AnimatePresence>
 
         {!loading && hotelList.length === 0 && isSearching === false && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-10">
-            <p className="text-gray-500 text-lg">Search for hotels to see results</p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-10"
+          >
+            <p className="text-gray-500 text-lg">
+              Search for hotels to see results
+            </p>
           </motion.div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Hotels
-
+export default Hotels;

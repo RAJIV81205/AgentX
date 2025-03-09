@@ -1,36 +1,32 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import cors from "cors"
+import cors from "cors";
 import { Schema, model } from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";  
-
+import bcrypt from "bcrypt";
 
 dotenv.config();
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://yourfrontend.com"], 
-  methods: "GET,POST,PUT,DELETE", 
-  allowedHeaders: "Content-Type,Authorization", 
-  credentials: true, 
+  origin: ["http://localhost:5173", "https://yourfrontend.com"],
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type,Authorization",
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
-
-
-
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("MongoDB connection error:", err));
-
 
 const userSchema = new Schema({
   name: { type: String, required: true },
@@ -42,11 +38,10 @@ const userSchema = new Schema({
 
 const User = model("User", userSchema);
 
-
 app.post("/signup", async (req, res) => {
   try {
     const { name, email, password, mobile } = req.body;
-    
+
     if (!name || !email || !password || !mobile) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -69,31 +64,21 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email});
-    if (!user) {  
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "5m" });
     res.status(200).json({ message: "Login successful", user, token });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
-
-app.post("/verify-token", async (req, res) => {
-  const { token } = req.body;
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.status(200).json({ message: "Token is valid", userId: decoded.userId });
-  } catch (error) {
-    res.status(401).json({ message: "Token is invalid" });
-  }
-});
 
 
 app.listen(PORT, () => {

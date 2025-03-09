@@ -163,13 +163,13 @@ const Flights = () => {
   };
 
   return (
-    <div>
+    <div className="w-full flex justify-center">
       <motion.form
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         onSubmit={handleSearch}
-        className=" max-w-7xl bg-blue-50 p-10 rounded-xl border border-blue-300 shadow-lg"
+        className="max-w-7xl bg-blue-50 p-10 rounded-xl border border-blue-300 shadow-lg"
       >
         <div className="flex gap-8 mb-6 mt-2 ">
           <label className="flex items-center gap-2 cursor-pointer">
