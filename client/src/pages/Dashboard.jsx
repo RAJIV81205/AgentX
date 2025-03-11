@@ -80,7 +80,7 @@ const Dashboard = () => {
     <>
       <Navbar />
       <div className="min-h-screen flex flex-col items-center p-4 w-full bg-white">
-        <div className="bg-blue-50 rounded-t-lg w-full max-w-4xl mt-8 border border-blue-300 border-b-0">
+        <div className="bg-indigo-50 rounded-t-lg w-full max-w-4xl mt-8 border border-indigo-200 border-b-0">
           <div className="flex flex-wrap justify-between px-6 py-4">
             {services.map((service) => (
               <button
@@ -88,23 +88,23 @@ const Dashboard = () => {
                 onClick={() => handleServiceChange(service.id)}
                 className={`flex flex-col items-center p-3 ${
                   selectedService === service.id
-                    ? "border-b-2 border-blue-950"
-                    : "hover:bg-blue-100"
+                    ? "border-b-2 border-indigo-600"
+                    : "hover:bg-indigo-100"
                 }`}
               >
                 <service.icon
                   className={
                     selectedService === service.id
-                      ? "text-blue-950"
-                      : "text-blue-300"
+                      ? "text-indigo-600"
+                      : "text-indigo-400"
                   }
                   size={24}
                 />
                 <span
                   className={`text-sm mt-1 ${
                     selectedService === service.id
-                      ? "text-blue-950 font-poppins"
-                      : "text-blue-600 font-poppins"
+                      ? "text-indigo-600 font-poppins"
+                      : "text-indigo-500 font-poppins"
                   }`}
                 >
                   {service.label}

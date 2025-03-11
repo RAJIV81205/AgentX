@@ -171,7 +171,7 @@ const TrainSearch = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-blue-50 rounded-xl border border-blue-300 shadow-lg p-6 md:p-10 max-w-7xl"
+        className="bg-indigo-50 rounded-xl border border-indigo-200 shadow-lg p-6 md:p-10 max-w-7xl"
         onSubmit={handleTrainSearch}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6 relative">
@@ -265,7 +265,7 @@ const TrainSearch = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
           disabled={isSearching}
         >
           {isSearching ? (
@@ -428,7 +428,7 @@ const TrainSearch = () => {
                                   <div
                                     className={`w-9 h-9 rounded-full flex items-center justify-center mx-auto ${
                                       isRunningDay
-                                        ? "bg-primary/15 text-primary"
+                                        ? "bg-indigo-100 text-indigo-600"
                                         : "bg-gray-100 text-gray-400"
                                     }`}
                                   >
@@ -498,7 +498,7 @@ const TrainSearch = () => {
 
                   <div className="flex-1 mx-4 flex items-center justify-center">
                     <div className="h-[1px] bg-gray-300 flex-1 relative">
-                      <div className="absolute -top-1 w-2 h-2 rounded-full bg-primary -left-1"></div>
+                      <div className="absolute -top-1 w-2 h-2 rounded-full bg-indigo-600 -left-1"></div>
 
                       <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex flex-col items-center">
                         <span className="text-sm font-medium">
@@ -509,7 +509,7 @@ const TrainSearch = () => {
                         </span>
                       </div>
 
-                      <div className="absolute -top-1 w-2 h-2 rounded-full bg-primary -right-1"></div>
+                      <div className="absolute -top-1 w-2 h-2 rounded-full bg-indigo-600 -right-1"></div>
                     </div>
                   </div>
 
@@ -593,7 +593,7 @@ const TrainSearch = () => {
                           <div
                             className={`w-9 h-9 rounded-full flex items-center justify-center mx-auto ${
                               selectedTrain.run_days.includes(day)
-                                ? "bg-primary/15 text-primary"
+                                ? "bg-indigo-100 text-indigo-600"
                                 : "bg-gray-100 text-gray-400"
                             }`}
                           >
@@ -604,6 +604,14 @@ const TrainSearch = () => {
                     )}
                   </div>
                 </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
+                >
+                  Book Now
+                </motion.button>
               </div>
             </motion.div>
           </motion.div>

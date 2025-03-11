@@ -163,13 +163,13 @@ const Flights = () => {
   };
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex flex-col items-center justify-center">
       <motion.form
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         onSubmit={handleSearch}
-        className="max-w-7xl bg-blue-50 p-10 rounded-xl border border-blue-300 shadow-lg"
+        className="max-w-7xl bg-indigo-50 p-10 rounded-xl border border-indigo-200 shadow-lg"
       >
         <div className="flex gap-8 mb-6 mt-2 ">
           <label className="flex items-center gap-2 cursor-pointer">
@@ -178,7 +178,7 @@ const Flights = () => {
               name="tripType"
               checked={tripType === "One Way"}
               onChange={() => setTripType("One Way")}
-              className="w-4 h-4 accent-blue-900"
+              className="w-4 h-4 accent-indigo-600"
             />
             <span>One Way</span>
           </label>
@@ -188,7 +188,7 @@ const Flights = () => {
               name="tripType"
               checked={tripType === "Round Trip"}
               onChange={() => setTripType("Round Trip")}
-              className="w-4 h-4 accent-blue-900"
+              className="w-4 h-4 accent-indigo-600"
             />
             <span>Round Trip</span>
           </label>
@@ -302,7 +302,7 @@ const Flights = () => {
 
         <button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
                   disabled={isSearching}
                 >
                   {isSearching ? (
@@ -319,7 +319,7 @@ const Flights = () => {
                 </button>
       </motion.form>
       {searchResults.length > 0 && (
-        <div className="w-full animate-fade-in mt-10" id="search-results">
+        <div className="w-full animate-fade-in mt-10 lg:w-2/3" id="search-results">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">
               Flight Results
@@ -429,7 +429,7 @@ const Flights = () => {
                       <button
                         className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer font-poppins ${
                           hoveredFlightId === flight.id
-                            ? "bg-blue-700 text-white shadow-md transform scale-105"
+                            ? "bg-indigo-600 text-white shadow-md transform scale-105"
                             : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                         }`}
                         onClick={() => {
@@ -448,7 +448,7 @@ const Flights = () => {
 
                 {/* Progress indicator bar on hover */}
                 <div
-                  className="h-1 bg-blue-700 absolute bottom-0 left-0 transition-all duration-700 ease-out"
+                  className="h-1 bg-indigo-600 absolute bottom-0 left-0 transition-all duration-700 ease-out"
                   style={{
                     width: hoveredFlightId === flight.id ? "100%" : "0%",
                   }}
