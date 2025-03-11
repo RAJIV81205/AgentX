@@ -169,16 +169,16 @@ const Flights = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         onSubmit={handleSearch}
-        className="max-w-7xl bg-indigo-50 p-10 rounded-xl border border-indigo-200 shadow-lg"
+        className="max-w-7xl bg-white p-10 rounded-xl border border-gray-200 shadow-sm"
       >
-        <div className="flex gap-8 mb-6 mt-2 ">
+        <div className="flex gap-8 mb-6 mt-2">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
               name="tripType"
               checked={tripType === "One Way"}
               onChange={() => setTripType("One Way")}
-              className="w-4 h-4 accent-indigo-600"
+              className="w-4 h-4 accent-black"
             />
             <span>One Way</span>
           </label>
@@ -188,7 +188,7 @@ const Flights = () => {
               name="tripType"
               checked={tripType === "Round Trip"}
               onChange={() => setTripType("Round Trip")}
-              className="w-4 h-4 accent-indigo-600"
+              className="w-4 h-4 accent-black"
             />
             <span>Round Trip</span>
           </label>
@@ -301,25 +301,25 @@ const Flights = () => {
         </div>
 
         <button
-                  type="submit"
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
-                  disabled={isSearching}
-                >
-                  {isSearching ? (
-                    <span className="flex items-center justify-center">
-                      <FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                      SEARCHING...
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center">
-                      SEARCH FLIGHTS
-                      <FaArrowRight className="ml-2 h-5 w-5" />
-                    </span>
-                  )}
-                </button>
+          type="submit"
+          className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 cursor-pointer font-montserrat"
+          disabled={isSearching}
+        >
+          {isSearching ? (
+            <span className="flex items-center justify-center">
+              <FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+              SEARCHING...
+            </span>
+          ) : (
+            <span className="flex items-center justify-center">
+              SEARCH FLIGHTS
+              <FaArrowRight className="ml-2 h-5 w-5" />
+            </span>
+          )}
+        </button>
       </motion.form>
       {searchResults.length > 0 && (
-        <div className="w-full animate-fade-in mt-10 lg:w-2/3" id="search-results">
+        <div className="w-full mt-10" id="search-results">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">
               Flight Results
@@ -421,7 +421,7 @@ const Flights = () => {
                       </div>
                     </div>
 
-                    {/* Price and CTA */}
+                    {/* Price and Book Now */}
                     <div className="flex flex-col items-center">
                       <div className="font-bold text-xl text-gray-900">
                         {flight.price}
@@ -429,7 +429,7 @@ const Flights = () => {
                       <button
                         className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer font-poppins ${
                           hoveredFlightId === flight.id
-                            ? "bg-indigo-600 text-white shadow-md transform scale-105"
+                            ? "bg-black text-white shadow-md transform scale-105"
                             : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                         }`}
                         onClick={() => {
@@ -448,11 +448,40 @@ const Flights = () => {
 
                 {/* Progress indicator bar on hover */}
                 <div
-                  className="h-1 bg-indigo-600 absolute bottom-0 left-0 transition-all duration-700 ease-out"
+                  className="h-1 bg-black absolute bottom-0 left-0 transition-all duration-700 ease-out"
                   style={{
                     width: hoveredFlightId === flight.id ? "100%" : "0%",
                   }}
                 />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* No Results Message */}
+      {searchResults.length === 0 && !isSearching && (
+        <div className="w-full mt-10 text-center">
+          <div className="text-gray-500">No flights found. Try different search criteria.</div>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {isSearching && (
+        <div className="w-full mt-10">
+          <div className="animate-pulse space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+                    <div>
+                      <div className="h-4 w-24 bg-gray-200 rounded"></div>
+                      <div className="h-3 w-16 bg-gray-200 rounded mt-2"></div>
+                    </div>
+                  </div>
+                  <div className="h-8 w-24 bg-gray-200 rounded"></div>
+                </div>
               </div>
             ))}
           </div>

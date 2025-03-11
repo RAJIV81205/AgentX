@@ -74,13 +74,13 @@ const Dashboard = () => {
 
   return isLoading ? (
     <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-black"></div>
     </div>
   ) : (
     <>
       <Navbar />
       <div className="min-h-screen flex flex-col items-center p-4 w-full bg-white">
-        <div className="bg-indigo-50 rounded-t-lg w-full max-w-4xl mt-8 border border-indigo-200 border-b-0">
+        <div className="bg-white rounded-t-lg w-full max-w-4xl mt-8 border border-gray-200 border-b-0 shadow-sm">
           <div className="flex flex-wrap justify-between px-6 py-4">
             {services.map((service) => (
               <button
@@ -88,23 +88,23 @@ const Dashboard = () => {
                 onClick={() => handleServiceChange(service.id)}
                 className={`flex flex-col items-center p-3 ${
                   selectedService === service.id
-                    ? "border-b-2 border-indigo-600"
-                    : "hover:bg-indigo-100"
+                    ? "border-b-2 border-black"
+                    : "hover:bg-gray-50"
                 }`}
               >
                 <service.icon
                   className={
                     selectedService === service.id
-                      ? "text-indigo-600"
-                      : "text-indigo-400"
+                      ? "text-black"
+                      : "text-gray-400"
                   }
                   size={24}
                 />
                 <span
                   className={`text-sm mt-1 ${
                     selectedService === service.id
-                      ? "text-indigo-600 font-poppins"
-                      : "text-indigo-500 font-poppins"
+                      ? "text-black font-medium"
+                      : "text-gray-500"
                   }`}
                 >
                   {service.label}

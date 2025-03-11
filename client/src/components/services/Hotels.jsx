@@ -143,7 +143,7 @@ const Hotels = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-blue-50 rounded-xl border border-blue-300 shadow-lg p-6 md:p-10 max-w-7xl"
+        className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-10 max-w-7xl"
         onSubmit={searchHotel}
       >
         <div className="md:grid grid-cols-4 gap-2 mb-6 relative flex flex-col">
@@ -219,7 +219,7 @@ const Hotels = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer font-montserrat"
+          className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-xl text-lg transition-colors duration-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 cursor-pointer font-montserrat"
           disabled={isSearching}
         >
           {isSearching ? (
