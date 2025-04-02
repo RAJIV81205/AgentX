@@ -6,8 +6,8 @@ const About = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center bg-white py-12 sm:py-16 lg:py-20">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 w-full">
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center bg-white py-12 sm:py-16 lg:py-20 w-full">
+      <div className="px-4 mx-auto max-w-8xl sm:px-6 lg:px-8 w-full">
         <motion.div
           className="grid grid-cols-1 mx-auto lg:grid-cols-2 gap-8 lg:gap-12 items-center"
           initial="hidden"
@@ -22,11 +22,11 @@ const About = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="flex items-center justify-center order-2 lg:order-1"
+            className="flex items-center justify-center order-2 lg:order-1 w-full "
           >
             <img
-              className="w-full h-auto max-w-md rounded-lg shadow-xl"
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+              className="w-full h-full max-w-md rounded-lg"
+              src="/about.jpg"
               alt="Team Collaboration"
             />
           </motion.div>
