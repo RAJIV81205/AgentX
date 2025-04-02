@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar"
 import Hero from "../components/Hero"
 import Built from "../components/Built"
+import About from "../components/About"
 
 function LandingPage(){
     return(
@@ -8,6 +9,7 @@ function LandingPage(){
         <Navbar />
         <Hero />
         <Built />
+        <About />
         </>
     )
 }
