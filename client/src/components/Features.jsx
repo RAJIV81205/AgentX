@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Features = () => {
   return (
-    <section className="min-h-screen bg-white text-gray-900 py-20 border-y border-gray-900 w-full">
+    <section className="min-h-screen bg-white text-gray-900 py-20 border-y border-gray-900 w-full" style={{backgroundImage: "url('/bg.png')", backgroundSize: "cover", backgroundPosition: "center"}}>
       <div className="w-full lg:w-[95%] mx-auto px-4">
         {/* Header Section */}
         <motion.div 

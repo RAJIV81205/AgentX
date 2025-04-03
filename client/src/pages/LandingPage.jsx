@@ -4,6 +4,7 @@ import Built from "../components/Built"
 import About from "../components/About"
 import Contact from "../components/Contact"
 import Features from "../components/Features"
+import Footer from "../components/Footer"
 
 function LandingPage(){
     return(
@@ -14,6 +15,7 @@ function LandingPage(){
         <About />
         <Features />
         <Contact />
+        <Footer />
         </>
     )
 }
