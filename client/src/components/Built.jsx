@@ -16,7 +16,7 @@ const scrollingTechnologies = [...technologies, ...technologies];
 
 function Built() {
   return (
-    <div className="flex flex-col justify-center items-center w-full overflow-hidden bg-gray-50 py-10 h-fit">
+    <div className="flex flex-col justify-center items-center w-full overflow-hidden bg-gray-50 py-10 h-fit border-y border-gray-900">
       <h2 className="text-3xl font-bold text-gray-800 mb-10 font-montserrat">Built With</h2>
       
       <div className="w-full overflow-hidden">

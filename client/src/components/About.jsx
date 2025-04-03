@@ -13,8 +13,8 @@ const About = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">About AgentX</h2>
-          <p className="text-gray-900 text-lg max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 font-montserrat">About AgentX</h2>
+          <p className="text-gray-900 text-lg max-w-2xl mx-auto font-poppins  ">
             Your AI-powered travel companion, making every journey unforgettable
           </p>
         </motion.div>
@@ -62,7 +62,7 @@ const About = () => {
               className="p-8 rounded-xl bg-gray-50 border border-gray-800"
             >
               <h3 className="text-2xl font-bold mb-4 text-gray-900">Our Vision</h3>
-              <p className="text-gray-900 leading-relaxed">
+              <p className="text-gray-900 leading-relaxed ">
                 To become the world's most trusted AI travel companion, empowering wanderers to explore the world with confidence and ease.
               </p>
             </motion.div>
