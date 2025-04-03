@@ -3,6 +3,7 @@ import Hero from "../components/Hero"
 import Built from "../components/Built"
 import About from "../components/About"
 import Contact from "../components/Contact"
+import Features from "../components/Features"
 
 function LandingPage(){
     return(
@@ -11,6 +12,7 @@ function LandingPage(){
         <Hero />
         <Built />
         <About />
+        <Features />
         <Contact />
         </>
     )
