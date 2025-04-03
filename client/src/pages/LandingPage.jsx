@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar"
 import Hero from "../components/Hero"
 import Built from "../components/Built"
 import About from "../components/About"
+import Contact from "../components/Contact"
 
 function LandingPage(){
     return(
@@ -10,6 +11,7 @@ function LandingPage(){
         <Hero />
         <Built />
         <About />
+        <Contact />
         </>
     )
 }

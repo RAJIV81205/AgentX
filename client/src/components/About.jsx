@@ -46,7 +46,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
-              className="p-8 rounded-xl bg-gray-50 border border-gray-800"
+              className="p-8 rounded-xl bg-gray-50 border border-gray-800 shadow-[2px_2px_0px_rgba(0,0,0,0.8)]"
             >
               <h3 className="text-2xl font-bold mb-4 text-gray-900">Our Mission</h3>
               <p className="text-gray-900 leading-relaxed">
@@ -59,7 +59,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
-              className="p-8 rounded-xl bg-gray-50 border border-gray-800"
+              className="p-8 rounded-xl bg-gray-50 border border-gray-800 shadow-[2px_2px_0px_rgba(0,0,0,0.8)]"
             >
               <h3 className="text-2xl font-bold mb-4 text-gray-900">Our Vision</h3>
               <p className="text-gray-900 leading-relaxed ">
@@ -72,7 +72,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
               viewport={{ once: true }}
-              className="p-8 rounded-xl bg-gray-50 border border-gray-800"
+              className="p-8 rounded-xl bg-gray-50 border border-gray-800 shadow-[2px_2px_0px_rgba(0,0,0,0.8)]"
             >
               <h3 className="text-2xl font-bold mb-4 text-gray-900">What We Offer</h3>
               <p className="text-gray-900 leading-relaxed">

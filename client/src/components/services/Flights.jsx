@@ -20,7 +20,6 @@ const Flights = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [fromSuggestions, setFromSuggestions] = useState([]);
   const [toSuggestions, setToSuggestions] = useState([]);
-  const [hoveredFlightId, setHoveredFlightId] = useState(null);
 
   const fetchSuggestions = async (input, setSuggestions) => {
     if (input.length < 3) {
@@ -169,7 +168,7 @@ const Flights = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         onSubmit={handleSearch}
-        className="max-w-7xl bg-white p-10 rounded-xl border border-gray-200 shadow-sm"
+        className="w-full md:w-4/5 lg:w-4/5 bg-white p-10 rounded-xl border border-gray-200 shadow-sm"
       >
         <div className="flex gap-8 mb-6 mt-2">
           <label className="flex items-center gap-2 cursor-pointer">
@@ -319,7 +318,7 @@ const Flights = () => {
         </button>
       </motion.form>
       {searchResults.length > 0 && (
-        <div className="w-full mt-10" id="search-results">
+        <div className="w-full md:w-4/5 lg:w-4/5 mt-10" id="search-results">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">
               Flight Results
@@ -335,13 +334,7 @@ const Flights = () => {
             {searchResults.map((flight) => (
               <div
                 key={flight.id}
-                className={`relative rounded-xl transition-all duration-300 ease-in-out overflow-hidden cursor-pointer ${
-                  hoveredFlightId === flight.id
-                    ? "shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border-transparent"
-                    : "border border-gray-200 bg-white"
-                }`}
-                onMouseEnter={() => setHoveredFlightId(flight.id)}
-                onMouseLeave={() => setHoveredFlightId(null)}
+                className="relative rounded-xl transition-all duration-300 ease-in-out overflow-hidden cursor-pointer border border-gray-200 bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:border-transparent"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between flex-wrap gap-4">
@@ -427,11 +420,7 @@ const Flights = () => {
                         {flight.price}
                       </div>
                       <button
-                        className={`mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer font-poppins ${
-                          hoveredFlightId === flight.id
-                            ? "bg-black text-white shadow-md transform scale-105"
-                            : "bg-gray-100 text-gray-900 hover:bg-gray-200"
-                        }`}
+                        className="mt-2 px-6 py-2 rounded-full transition-all duration-300 text-sm font-medium cursor-pointer font-poppins bg-gray-100 text-gray-900 hover:bg-black hover:text-white hover:shadow-md hover:scale-105"
                         onClick={() => {
                           const formattedDate = departureDate.replace(/-/g, "");
                           window.open(
@@ -445,14 +434,6 @@ const Flights = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Progress indicator bar on hover */}
-                <div
-                  className="h-1 bg-black absolute bottom-0 left-0 transition-all duration-700 ease-out"
-                  style={{
-                    width: hoveredFlightId === flight.id ? "100%" : "0%",
-                  }}
-                />
               </div>
             ))}
           </div>
