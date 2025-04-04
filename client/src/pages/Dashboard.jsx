@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { FaPlane, FaTrain, FaBuilding } from "react-icons/fa";
+import { FaPlane, FaTrain, FaBuilding, FaCarSide   } from "react-icons/fa";
 import { MdCurrencyExchange } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import Forex from "../components/services/Forex";
 import Flights from "../components/services/Flights";
 import Hotels from "../components/services/Hotels";
 import TrainSearch from "../components/services/Trains";
+import Cabs from "../components/services/Cabs";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +20,7 @@ const Dashboard = () => {
     { id: "Hotels", icon: FaBuilding, label: "Hotels", component: Hotels },
     { id: "Trains", icon: FaTrain, label: "Trains", component: TrainSearch },
     { id: "Forex", icon: MdCurrencyExchange, label: "Forex", component: Forex },
+    { id: "Cabs", icon: FaCarSide, label: "Cabs", component: Cabs },
   ];
 
   useEffect(() => {
