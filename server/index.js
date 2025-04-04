@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://yourfrontend.com"],
-  methods: "GET,POST,PUT,DELETE",
+  origin: ["http://localhost:5173", "https://agentx-1.vercel.app/"],
+  methods: "GET,POST,",
   allowedHeaders: "Content-Type,Authorization",
   credentials: true,
 };
