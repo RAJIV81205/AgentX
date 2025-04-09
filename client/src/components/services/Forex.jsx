@@ -12,6 +12,61 @@ const Forex = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currencies, setCurrencies] = useState([]);
 
+  // Currency to country code mapping
+  const currencyToCountry = {
+    USD: "US",
+    EUR: "EU",
+    GBP: "GB",
+    JPY: "JP",
+    AUD: "AU",
+    CAD: "CA",
+    CHF: "CH",
+    CNY: "CN",
+    INR: "IN",
+    NZD: "NZ",
+    BRL: "BR",
+    RUB: "RU",
+    ZAR: "ZA",
+    MXN: "MX",
+    SGD: "SG",
+    HKD: "HK",
+    SEK: "SE",
+    NOK: "NO",
+    DKK: "DK",
+    PLN: "PL",
+    TRY: "TR",
+    AED: "AE",
+    SAR: "SA",
+    KRW: "KR",
+    THB: "TH",
+    MYR: "MY",
+    IDR: "ID",
+    PHP: "PH",
+    VND: "VN",
+    CZK: "CZ",
+    HUF: "HU",
+    ILS: "IL",
+    CLP: "CL",
+    COP: "CO",
+    EGP: "EG",
+    PKR: "PK",
+    TWD: "TW",
+    // Add more mappings as needed
+  };
+
+  // Function to get flag emoji for currency code
+  const getCurrencyFlag = (currencyCode) => {
+    const countryCode = currencyToCountry[currencyCode];
+    if (!countryCode) return currencyCode;
+    
+    // Convert country code to flag emoji
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt());
+    return String.fromCodePoint(...codePoints);
+  };
+
   useEffect(() => {
     // Fetch list of currencies
     const fetchCurrencies = async () => {
@@ -20,6 +75,7 @@ const Forex = () => {
           "https://api.exchangerate-api.com/v4/latest/USD"
         );
         const data = await response.json();
+        console.log(data);
         setCurrencies(Object.keys(data.rates));
       } catch (error) {
         console.error("Error fetching currencies:", error);
@@ -89,7 +145,7 @@ const Forex = () => {
             >
               {currencies.map((currency) => (
                 <option key={currency} value={currency} className="text-sm py-1">
-                  {currency}
+                  {getCurrencyFlag(currency)} {currency}
                 </option>
               ))}
             </select>
@@ -113,7 +169,7 @@ const Forex = () => {
             >
               {currencies.map((currency) => (
                 <option key={currency} value={currency} className="text-sm py-1">
-                  {currency}
+                  {getCurrencyFlag(currency)} {currency}
                 </option>
               ))}
             </select>
@@ -135,7 +191,7 @@ const Forex = () => {
             <div className="text-center">
               <div className="text-sm text-gray-500">Converted Amount</div>
               <div className="text-3xl font-bold text-blue-600">
-                {convertedAmount} {toCurrency}
+                {convertedAmount} {getCurrencyFlag(toCurrency)} {toCurrency}
               </div>
             </div>
           </div>
